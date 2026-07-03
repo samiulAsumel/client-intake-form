@@ -1,0 +1,2363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Requirement Form</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23ece5d3'/%3E%3Crect x='4' y='4' width='24' height='24' rx='3' fill='none' stroke='%2314213d' stroke-width='2.2'/%3E%3Cpath d='M10 16.5l4 4 8-8.5' fill='none' stroke='%230d6657' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="description" content="Project requirement intake form — tell us about your business and project so we can prepare an accurate quotation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14213d;
+    --ink-soft:#2a3557;
+    --paper:#ece5d3;
+    --card:#fbf8f0;
+    --card-hover:#f4efe0;
+    --line:#c7bd9f;
+    --line-soft:#dcd3ba;
+    --stamp-teal:#0d6657;
+    --stamp-teal-deep:#094b40;
+    --stamp-teal-wash:#e6efe7;
+    --stamp-red:#a3311c;
+    --muted:#726b56;
+    --radius:3px;
+    --shadow-sm:0 1px 2px rgba(20,33,61,.05), 0 2px 8px rgba(20,33,61,.05);
+    --shadow-md:0 4px 10px rgba(20,33,61,.07), 0 14px 32px rgba(20,33,61,.09);
+  }
+  *{box-sizing:border-box;}
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;} }
+
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;color:var(--ink);font-family:'Spectral',Georgia,serif;line-height:1.55;
+    background-color:var(--paper);
+    background-image:radial-gradient(circle at 1px 1px, rgba(20,33,61,0.055) 1px, transparent 0);
+    background-size:16px 16px;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;letter-spacing:0.03em;}
+  a{color:inherit;}
+  ::selection{background:var(--stamp-teal);color:#fff;}
+
+  .skip-link{position:absolute;left:-999px;top:0;background:var(--ink);color:#fff;padding:10px 16px;z-index:100;font-family:'IBM Plex Mono',monospace;font-size:12px;}
+  .skip-link:focus{left:12px;top:12px;}
+
+  /* progress bar */
+  #progressTrack{position:sticky;top:0;left:0;width:100%;height:4px;background:rgba(20,33,61,0.12);z-index:50;}
+  #progressFill{height:100%;width:0%;background:linear-gradient(90deg,var(--stamp-teal-deep),var(--stamp-teal));transition:width .35s ease;}
+
+  header{
+    border-bottom:3px solid var(--ink);
+    background:
+      linear-gradient(var(--paper),var(--paper)) padding-box,
+      radial-gradient(circle at 1px 1px, rgba(20,33,61,0.055) 1px, transparent 0);
+  }
+  .header-inner{
+    position:relative;
+    max-width:880px;
+    margin:0 auto;
+    padding:40px 24px 28px;
+  }
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--stamp-teal-deep);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--stamp-teal);display:inline-block;box-shadow:0 0 0 3px var(--stamp-teal-wash);}
+  h1{margin:0 0 12px;font-size:36px;font-weight:700;letter-spacing:-0.02em;font-family:'Spectral',serif;padding-right:110px;line-height:1.12;}
+  .sub{color:var(--ink-soft);font-size:15px;line-height:1.55;max-width:60ch;text-wrap:pretty;}
+
+  /* stamp badge */
+  #stampBadge{
+    position:absolute;
+    top:38px;
+    right:24px;
+    width:96px;height:96px;
+    border:2px dashed var(--stamp-red);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    transform:rotate(-9deg);
+    color:var(--stamp-red);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.08em;
+    font-weight:600;
+    line-height:1.35;
+    padding:6px;
+    box-shadow:inset 0 0 0 5px rgba(163,49,28,0.06);
+    transition:transform .4s ease, color .4s ease, border-color .4s ease, box-shadow .4s ease;
+  }
+  #stampBadge.ready{border:2px solid var(--stamp-teal);color:var(--stamp-teal-deep);transform:rotate(-5deg) scale(1.03);box-shadow:inset 0 0 0 5px rgba(13,102,87,0.08);}
+  #stampBadge.done{border:2px solid var(--stamp-teal);color:var(--stamp-teal-deep);transform:rotate(-3deg) scale(1.08);box-shadow:inset 0 0 0 5px rgba(13,102,87,0.1);}
+  @media (max-width:640px){ #stampBadge{display:none;} h1{padding-right:0;} }
+
+  /* jump nav */
+  #jumpNav{
+    position:sticky;top:4px;z-index:40;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    padding:10px 24px;
+  }
+  #jumpNav .inner{max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:4px;}
+  .jn-progress{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;padding-left:2px;display:flex;align-items:center;gap:8px;justify-content:space-between;}
+  .autosave-ind{display:flex;align-items:center;gap:6px;color:var(--muted);text-transform:none;letter-spacing:0.02em;}
+  .autosave-dot{width:6px;height:6px;border-radius:50%;background:var(--line);flex-shrink:0;transition:background .2s ease;}
+  .autosave-ind.saved .autosave-dot{background:var(--stamp-teal);animation:dotPulse 1.6s ease-in-out 1;}
+  .autosave-ind.save-err{color:var(--stamp-red);}
+  .autosave-ind.save-err .autosave-dot{background:var(--stamp-red);}
+  @keyframes dotPulse{0%{box-shadow:0 0 0 0 rgba(13,102,87,.35);}70%{box-shadow:0 0 0 6px rgba(13,102,87,0);}100%{box-shadow:0 0 0 0 rgba(13,102,87,0);}}
+  .jn-row{display:flex;align-items:center;gap:10px;}
+  .jn-picker{flex:1 1 auto;min-width:0;}
+  #jnSelect{width:100%;height:36px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;padding:0 34px 0 12px;background:var(--card);}
+  .jn-arrow{
+    flex:0 0 auto;width:36px;height:36px;padding:0;border-radius:50%;
+    border:1px solid var(--line);background:var(--card);color:var(--ink);
+    display:flex;align-items:center;justify-content:center;font-size:15px;line-height:1;cursor:pointer;
+    transition:border-color .15s ease,background .15s ease,color .15s ease;
+  }
+  .jn-arrow:hover:not(:disabled){border-color:var(--stamp-teal);color:var(--stamp-teal-deep);background:var(--stamp-teal-wash);}
+  .jn-arrow:disabled{opacity:.35;cursor:default;}
+  @media (max-width:520px){ .jn-progress{display:none;} }
+
+  main{max-width:880px;margin:0 auto;padding:12px 24px 90px;}
+  .section{position:relative;border-top:1px solid var(--line);padding:34px 0 34px 68px;scroll-margin-top:96px;}
+  .section:first-of-type{border-top:none;}
+  .sec-num{
+    position:absolute;left:0;top:35px;width:54px;
+    font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;
+    color:var(--line);letter-spacing:0.01em;line-height:1;
+  }
+  .sec-title{font-size:21px;font-weight:600;margin:0 0 5px;font-family:'Spectral',serif;letter-spacing:-0.005em;}
+  .sec-note{font-size:13.5px;color:var(--muted);margin-bottom:20px;max-width:64ch;text-wrap:pretty;}
+  .req{color:var(--stamp-red);margin-left:3px;}
+
+  @media (max-width:640px){
+    .section{padding-left:0;padding-top:30px;padding-bottom:30px;}
+    .sec-num{position:static;width:auto;font-size:12px;color:var(--stamp-teal-deep);letter-spacing:0.12em;display:block;margin-bottom:6px;}
+  }
+
+  .field{margin-bottom:19px;}
+  .field label{display:block;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.03em;color:var(--ink);margin-bottom:7px;}
+  .field .hint{font-size:12.5px;color:var(--muted);font-family:'Spectral',serif;margin-top:5px;line-height:1.5;}
+
+  input[type=text], input[type=email], input[type=tel], textarea, select{
+    width:100%;padding:12px 13px;background:var(--card);border:1px solid var(--line);
+    border-radius:var(--radius);font-family:'Spectral',serif;font-size:14.5px;color:var(--ink);
+    box-shadow:inset 0 1px 1px rgba(20,33,61,.03);
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  input[type=text]:hover, input[type=email]:hover, input[type=tel]:hover, textarea:hover, select:hover{border-color:#b3a880;}
+  input[type=text]:focus, input[type=email]:focus, input[type=tel]:focus, textarea:focus, select:focus{
+    border-color:var(--stamp-teal);outline:none;box-shadow:0 0 0 3px rgba(13,102,87,.12);
+  }
+  textarea{resize:vertical;min-height:76px;}
+  input::placeholder, textarea::placeholder{color:#9a927a;}
+
+  select{
+    appearance:none;-webkit-appearance:none;-moz-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23726b56' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 8l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;background-size:14px;padding-right:36px;
+    cursor:pointer;
+  }
+
+  input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible, .type-card:focus-within{
+    outline:2px solid var(--stamp-teal);outline-offset:2px;
+  }
+  input.field-error, select.field-error, textarea.field-error{border-color:var(--stamp-red);box-shadow:0 0 0 3px rgba(163,49,28,.1);}
+
+  .row{display:flex;gap:16px;flex-wrap:wrap;}
+  .row .field{flex:1 1 220px;}
+  fieldset{border:1px solid var(--line);border-radius:var(--radius);padding:20px 20px 18px;background:var(--card);box-shadow:0 1px 2px rgba(20,33,61,0.04);}
+  legend{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.09em;text-transform:uppercase;padding:0 8px;color:var(--stamp-teal-deep);font-weight:600;}
+  .check-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  @media (max-width:640px){ .check-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:400px){ .check-grid{grid-template-columns:1fr;} }
+  .check-item{
+    display:flex;align-items:center;gap:10px;font-size:14px;
+    padding:11px 13px;border-radius:8px;
+    border:1px solid var(--line-soft);background:var(--paper);
+    transition:border-color .14s ease, background .14s ease, box-shadow .14s ease;
+    cursor:pointer;
+  }
+  .check-item:hover{border-color:var(--stamp-teal);background:var(--card-hover);}
+  .check-item input[type=checkbox]{
+    appearance:none;-webkit-appearance:none;flex-shrink:0;cursor:pointer;
+    width:19px;height:19px;border-radius:5px;
+    border:1.5px solid var(--line);background:var(--card);
+    position:relative;transition:background .15s ease,border-color .15s ease;
+  }
+  .check-item input[type=checkbox]:checked{background:var(--stamp-teal);border-color:var(--stamp-teal);}
+  .check-item input[type=checkbox]:checked::after{
+    content:"";position:absolute;left:5.5px;top:1.5px;width:5px;height:9px;
+    border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);
+  }
+  .check-item input[type=checkbox]:focus-visible{outline:2px solid var(--stamp-teal);outline-offset:2px;}
+  .check-item:has(input:checked){border-color:var(--stamp-teal);background:var(--stamp-teal-wash);box-shadow:0 1px 3px rgba(13,102,87,0.12);}
+  .check-item.reco{background:var(--stamp-teal-wash);border-color:var(--stamp-teal);box-shadow:inset 0 0 0 1px var(--stamp-teal);}
+  .check-item.reco:hover{background:var(--stamp-teal-wash);}
+  .check-item.reco::after{content:"Suggested";font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;background:var(--stamp-teal);border-radius:20px;padding:2.5px 8px;margin-left:auto;white-space:nowrap;}
+  .radio-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:4px;}
+  .radio-item{display:flex;align-items:center;gap:7px;font-size:14px;}
+  .radio-item input{width:16px;height:16px;accent-color:var(--stamp-teal);cursor:pointer;}
+  .other-line{display:flex;align-items:center;gap:10px;margin-top:12px;}
+  .other-line input[type=text]{flex:1;}
+
+  .actions{margin-top:40px;padding-top:28px;border-top:1px solid var(--line);display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  button{font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:0.06em;text-transform:uppercase;padding:14px 24px;border-radius:var(--radius);border:none;cursor:pointer;transition:background .15s ease,border-color .15s ease,color .15s ease,transform .08s ease,box-shadow .15s ease;}
+  button:active{transform:translateY(1px);}
+  #generateBtn{background:var(--ink);color:#fff;box-shadow:var(--shadow-sm);}
+  #generateBtn:hover{background:#000;box-shadow:var(--shadow-md);}
+  #copyBtn, #printBtn{background:var(--card);border:1px solid var(--ink);color:var(--ink);}
+  #copyBtn:hover, #printBtn:hover{background:var(--ink);color:#fff;}
+  #resetBtn{background:transparent;}
+  #resetBtn:hover{background:rgba(114,107,86,.12);}
+  button:disabled{opacity:.5;cursor:default;transform:none;}
+  #status{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--stamp-teal-deep);}
+  #status[data-err="1"]{color:var(--stamp-red);}
+
+  #summaryWrap{display:none;margin-top:30px;}
+  #summaryWrap .sec-title{font-size:16px;}
+  #summaryBox{
+    background:var(--card);border:1px solid var(--line);
+    padding:24px 24px 22px;white-space:pre-wrap;font-family:'IBM Plex Mono',monospace;font-size:12.4px;line-height:1.7;
+    max-height:520px;overflow-y:auto;border-radius:var(--radius);box-shadow:var(--shadow-sm);
+    background-image:repeating-linear-gradient(var(--card) 0 27px, rgba(20,33,61,0.035) 27px 28px);
+    background-position:0 6px;
+  }
+
+  .tip-box{background:var(--stamp-teal-wash);padding:11px 15px;font-size:13px;color:var(--stamp-teal-deep);margin-top:9px;border-radius:var(--radius);box-shadow:inset 0 0 0 1px rgba(13,102,87,.18);}
+
+  /* ---- section 01: project-type picker (premium) ---- */
+  #sec-1 .sec-title{font-size:23px;}
+  #sec-1 .sec-num{
+    background:var(--ink);color:var(--paper);width:38px;height:38px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:15px;top:35px;left:8px;
+    box-shadow:var(--shadow-sm);
+  }
+  @media (max-width:640px){ #sec-1 .sec-num{position:static;width:32px;height:32px;font-size:13px;margin-bottom:10px;} }
+
+  .type-toggle{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  @media (max-width:700px){ .type-toggle{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:380px){ .type-toggle{grid-template-columns:1fr;} }
+  .type-card{
+    position:relative;overflow:hidden;
+    border:1.5px solid var(--line);border-radius:10px;padding:20px 18px 18px;
+    cursor:pointer;background:var(--card);display:flex;flex-direction:column;gap:10px;
+    transition:border-color .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s cubic-bezier(.2,.8,.2,1), transform .18s cubic-bezier(.2,.8,.2,1), background .2s ease;
+  }
+  .type-card::before{
+    content:"";position:absolute;inset:0;border-radius:10px;pointer-events:none;opacity:0;
+    background:radial-gradient(120px 90px at 20% 0%, rgba(13,102,87,.14), transparent 70%);
+    transition:opacity .25s ease;
+  }
+  .type-card:hover{border-color:var(--stamp-teal);box-shadow:var(--shadow-md);transform:translateY(-3px);}
+  .type-card:hover::before{opacity:1;}
+  .type-card:active{transform:translateY(-1px) scale(.99);}
+  .type-card input{position:absolute;opacity:0;pointer-events:none;}
+
+  .tc-top{display:flex;align-items:center;justify-content:space-between;}
+  .type-card .tc-icon{
+    width:44px;height:44px;border-radius:50%;flex-shrink:0;
+    background:var(--stamp-teal-wash);color:var(--stamp-teal-deep);
+    display:flex;align-items:center;justify-content:center;
+    transition:background .2s ease, color .2s ease, transform .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .type-card .tc-icon svg{width:22px;height:22px;display:block;}
+  .type-card:hover .tc-icon{transform:rotate(-6deg) scale(1.06);}
+
+  .tc-check{
+    width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    transition:border-color .2s ease, background .2s ease, transform .25s cubic-bezier(.34,1.56,.64,1);
+    transform:scale(1);
+  }
+  .tc-check svg{width:12px;height:12px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:16;stroke-dashoffset:16;transition:stroke-dashoffset .25s ease .05s;}
+  .type-card.active .tc-check{background:var(--stamp-teal);border-color:var(--stamp-teal);transform:scale(1.08);}
+  .type-card.active .tc-check svg{stroke-dashoffset:0;}
+
+  .type-card.active{
+    border-color:var(--stamp-teal);background:var(--stamp-teal-wash);
+    box-shadow:0 0 0 1px var(--stamp-teal), var(--shadow-md);
+    animation:tcPop .32s cubic-bezier(.34,1.56,.64,1);
+  }
+  .type-card.active .tc-icon{background:var(--stamp-teal);color:#fff;}
+  @keyframes tcPop{0%{transform:scale(.97);}55%{transform:scale(1.015);}100%{transform:scale(1);}}
+
+  .type-card .t-name{font-weight:600;font-size:15px;font-family:'Spectral',serif;letter-spacing:-0.005em;}
+  .type-card .t-desc{font-size:12px;color:var(--muted);line-height:1.4;}
+
+  #ptConfirm{
+    display:flex;align-items:center;gap:10px;margin-top:16px;padding:11px 15px;
+    background:var(--stamp-teal-wash);border-radius:8px;box-shadow:inset 0 0 0 1px rgba(13,102,87,.18);
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--stamp-teal-deep);
+    opacity:0;transform:translateY(-4px);height:0;padding-top:0;padding-bottom:0;overflow:hidden;
+    transition:opacity .25s ease, transform .25s ease, height .25s ease, padding .25s ease;
+  }
+  #ptConfirm.show{opacity:1;transform:translateY(0);height:auto;padding-top:11px;padding-bottom:11px;}
+  #ptConfirm svg{width:15px;height:15px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+  footer{display:none;}
+  .footer-inner{max-width:880px;margin:0 auto;padding:26px 24px 56px;}
+
+  @media print{
+    button, #progressTrack, #jumpNav, #stampBadge, .eyebrow{display:none;}
+    body{background:#fff;}
+    .section{page-break-inside:avoid;}
+  }
+
+  @media (max-width:640px){
+    .header-inner{padding:28px 20px 22px;}
+    h1{font-size:26px;}
+    main{padding:8px 20px 70px;}
+    .actions{gap:10px;}
+    button{padding:13px 18px;}
+  }
+
+  @media (min-width:1400px){
+    main, header .header-inner, footer .footer-inner, #jumpNav .inner{max-width:960px;}
+  }
+</style>
+</head>
+<body>
+
+<a href="#mainForm" class="skip-link">Skip to form</a>
+
+<div id="progressTrack" aria-hidden="true"><div id="progressFill"></div></div>
+
+<header>
+<div class="header-inner">
+  <div class="eyebrow">Client Intake — Project Requirement Form</div>
+  <h1>Project Requirement Sheet</h1>
+  <div class="sub">Covers websites, online stores, and custom software / apps — for any business type. Fill in detail, select your business type for tailored suggestions, then generate a clean summary at the end. You'll receive a written quotation after we review your answers.</div>
+  <div style="display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--line-soft);">
+    <div class="mono" id="refLine" style="font-size:11.5px;font-weight:600;color:var(--stamp-teal-deep);letter-spacing:0.08em;"></div>
+    <span class="mono" style="font-size:11px;color:var(--muted);">·</span>
+    <span class="mono" style="font-size:11px;color:var(--muted);">Fields marked <span class="req" style="margin:0;">*</span> are required</span>
+  </div>
+  <div id="stampBadge" class="mono" aria-live="polite">DRAFT<br>IN PROGRESS</div>
+</div>
+</header>
+
+<nav id="jumpNav" aria-label="Jump to section">
+  <div class="inner">
+    <span class="jn-progress" id="jnProgress">
+      <span id="jnProgressText">Section 1 of 1</span>
+      <span class="autosave-ind" id="autosaveInd"><span class="autosave-dot"></span><span id="autosaveText">Not saved yet</span></span>
+    </span>
+    <div class="jn-row">
+      <button type="button" id="jnPrev" class="jn-arrow mono" aria-label="Previous section">&#8592;</button>
+      <div class="jn-picker">
+        <select id="jnSelect" aria-label="Jump to section"></select>
+      </div>
+      <button type="button" id="jnNext" class="jn-arrow mono" aria-label="Next section">&#8594;</button>
+    </div>
+  </div>
+</nav>
+
+<main id="mainForm">
+
+  <div class="section" id="sec-1">
+    <div class="sec-num mono">01</div>
+    <div class="sec-title">What are you building?<span class="req" aria-hidden="true">*</span></div>
+    <div class="sec-note">This changes which questions you'll see below.</div>
+    <div class="type-toggle" id="projectTypeToggle" role="radiogroup" aria-label="Project type">
+      <label class="type-card" data-val="website">
+        <input type="radio" name="projectType" value="website">
+        <span class="tc-top">
+          <span class="tc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 6 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-6-3.8-9s1.3-6.3 3.8-9z"/></svg></span>
+          <span class="tc-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></span>
+        </span>
+        <span class="t-name">Website</span>
+        <span class="t-desc">Informational / brochure site</span>
+      </label>
+      <label class="type-card" data-val="store">
+        <input type="radio" name="projectType" value="store">
+        <span class="tc-top">
+          <span class="tc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg></span>
+          <span class="tc-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></span>
+        </span>
+        <span class="t-name">Online store</span>
+        <span class="t-desc">Sell products/services online</span>
+      </label>
+      <label class="type-card" data-val="software">
+        <input type="radio" name="projectType" value="software">
+        <span class="tc-top">
+          <span class="tc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4"/></svg></span>
+          <span class="tc-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></span>
+        </span>
+        <span class="t-name">Custom software</span>
+        <span class="t-desc">Web app, portal, SaaS, internal tool</span>
+      </label>
+      <label class="type-card" data-val="unsure">
+        <input type="radio" name="projectType" value="unsure">
+        <span class="tc-top">
+          <span class="tc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 013.7-2.2c.9.5 1.5 1.3 1.5 2.2 0 2-2.5 1.8-2.7 4"/><circle cx="12" cy="16.3" r="0.15" fill="currentColor" stroke-width="1.4"/></svg></span>
+          <span class="tc-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></span>
+        </span>
+        <span class="t-name">Not sure</span>
+        <span class="t-desc">Need advice on what fits</span>
+      </label>
+    </div>
+    <div id="ptConfirm" aria-live="polite">
+      <svg viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg>
+      <span id="ptConfirmText"></span>
+    </div>
+  </div>
+
+  <div class="section" id="sec-2">
+    <div class="sec-num mono">02</div>
+    <div class="sec-title">Business basics</div>
+    <div class="row">
+      <div class="field">
+        <label for="bizType">Industry / business type<span class="req">*</span></label>
+        <select id="bizType" required aria-required="true"></select>
+        <div class="hint" id="recoNote" style="display:none;" aria-live="polite"></div>
+        <div class="tip-box" id="recoTip" style="display:none;"></div>
+      </div>
+      <div class="field">
+        <label for="bizName">Business / brand name<span class="req">*</span></label>
+        <input type="text" id="bizName" required aria-required="true" placeholder="Enter your business or brand name">
+        <div class="hint">Selecting your industry above tailors this example to your type of business.</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field"><label for="contactName">Owner / contact person<span class="req">*</span></label><input type="text" id="contactName" required aria-required="true" placeholder="Full name of the person we should deal with"></div>
+      <div class="field"><label for="phone">Phone / WhatsApp<span class="req">*</span></label><input type="tel" id="phone" required aria-required="true" placeholder="Enter your phone or WhatsApp number"></div>
+      <div class="field"><label for="email">Email</label><input type="email" id="email" placeholder="Enter your email address"></div>
+    </div>
+    <div class="field">
+      <label for="location">Business location(s) / service area</label>
+      <input type="text" id="location" placeholder="Enter your business address or the area you serve">
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="commChannel">Preferred contact method</label>
+        <select id="commChannel">
+          <option value="">— select —</option>
+          <option>WhatsApp</option>
+          <option>Phone call</option>
+          <option>Email</option>
+          <option>In-person meeting</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="commTime">Best time to contact you</label>
+        <input type="text" id="commTime" placeholder="Tell us the best days/times to reach you">
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="timezone">Your timezone (if outside Bangladesh)</label>
+        <select id="timezone">
+          <option value="">— select —</option>
+          <option>GMT-12:00 — Baker Island</option>
+          <option>GMT-11:00 — American Samoa</option>
+          <option>GMT-10:00 — Hawaii</option>
+          <option>GMT-09:30 — Marquesas Islands</option>
+          <option>GMT-09:00 — Alaska</option>
+          <option>GMT-08:00 — US Pacific (LA, Vancouver)</option>
+          <option>GMT-07:00 — US Mountain (Denver)</option>
+          <option>GMT-06:00 — US Central (Chicago)</option>
+          <option>GMT-05:00 — US Eastern (New York, Toronto)</option>
+          <option>GMT-04:00 — Atlantic (Halifax, Santiago)</option>
+          <option>GMT-03:30 — Newfoundland</option>
+          <option>GMT-03:00 — Argentina / Brazil (Buenos Aires, São Paulo)</option>
+          <option>GMT-02:00 — Mid-Atlantic</option>
+          <option>GMT-01:00 — Azores</option>
+          <option>GMT+00:00 — UK / Ireland / Portugal (London)</option>
+          <option>GMT+01:00 — Central Europe (Paris, Berlin, Lagos)</option>
+          <option>GMT+02:00 — Eastern Europe / Egypt (Cairo, Athens)</option>
+          <option>GMT+03:00 — East Africa / Middle East (Nairobi, Riyadh, Moscow)</option>
+          <option>GMT+03:30 — Iran (Tehran)</option>
+          <option>GMT+04:00 — Gulf (Dubai, Abu Dhabi, Muscat)</option>
+          <option>GMT+04:30 — Afghanistan (Kabul)</option>
+          <option>GMT+05:00 — Pakistan (Karachi, Islamabad)</option>
+          <option>GMT+05:30 — India / Sri Lanka (Delhi, Colombo)</option>
+          <option>GMT+05:45 — Nepal (Kathmandu)</option>
+          <option>GMT+06:00 — Bangladesh (Dhaka)</option>
+          <option>GMT+06:30 — Myanmar (Yangon)</option>
+          <option>GMT+07:00 — Thailand / Vietnam (Bangkok, Hanoi)</option>
+          <option>GMT+08:00 — Singapore / Malaysia / China (Kuala Lumpur, Beijing)</option>
+          <option>GMT+08:45 — Australia (Eucla)</option>
+          <option>GMT+09:00 — Japan / South Korea (Tokyo, Seoul)</option>
+          <option>GMT+09:30 — Australia Central (Adelaide, Darwin)</option>
+          <option>GMT+10:00 — Australia Eastern (Sydney, Brisbane)</option>
+          <option>GMT+10:30 — Lord Howe Island</option>
+          <option>GMT+11:00 — Solomon Islands</option>
+          <option>GMT+12:00 — New Zealand (Auckland, Fiji)</option>
+          <option>GMT+12:45 — Chatham Islands</option>
+          <option>GMT+13:00 — Samoa / Tonga</option>
+          <option>GMT+14:00 — Kiribati (Line Islands)</option>
+          <option>Not sure</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="heardFrom">How did you hear about us?</label>
+        <select id="heardFrom">
+          <option value="">— select —</option>
+          <option>Referral / word of mouth</option>
+          <option>LinkedIn</option>
+          <option>Facebook</option>
+          <option>Google search</option>
+          <option>Saw a previous project</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="pointOfContact">Single point of contact for feedback/approval</label>
+      <input type="text" id="pointOfContact" placeholder="One person's name — who gives final feedback">
+      <div class="hint">One decision-giver keeps the project fast. Committee feedback slows everything down.</div>
+    </div>
+  </div>
+
+  <div class="section" id="sec-3">
+    <div class="sec-num mono">03</div>
+    <div class="sec-title">Current setup</div>
+    <div class="radio-row" role="radiogroup" aria-label="Current setup status">
+      <div class="radio-item"><input type="radio" name="hasSite" value="yes" id="hs1"><label for="hs1">Existing website/app</label></div>
+      <div class="radio-item"><input type="radio" name="hasSite" value="no" id="hs2"><label for="hs2">Nothing yet</label></div>
+      <div class="radio-item"><input type="radio" name="hasSite" value="rebuild" id="hs3"><label for="hs3">Have one, needs rebuild/upgrade</label></div>
+      <div class="radio-item"><input type="radio" name="hasSite" value="manual" id="hs4"><label for="hs4">Currently manual (paper/Excel/WhatsApp)</label></div>
+    </div>
+    <div class="field" style="margin-top:14px;">
+      <label for="existingLinks">Existing website / app / social links (if any)</label>
+      <input type="text" id="existingLinks" placeholder="Enter the URL, Facebook page, or current system name">
+    </div>
+  </div>
+
+  <div class="section" id="sec-4">
+    <div class="sec-num mono">04</div>
+    <div class="sec-title">Goal — what should this solve?</div>
+    <div class="sec-note">Select all that apply.</div>
+    <fieldset>
+      <legend>Primary goal</legend>
+      <div class="check-grid">
+        <label class="check-item"><input type="checkbox" value="Sell products online"> Sell products online</label>
+        <label class="check-item"><input type="checkbox" value="Take orders / bookings"> Take orders / bookings</label>
+        <label class="check-item"><input type="checkbox" value="Showcase services / portfolio"> Showcase services / portfolio</label>
+        <label class="check-item"><input type="checkbox" value="Generate leads / inquiries"> Generate leads / inquiries</label>
+        <label class="check-item"><input type="checkbox" value="Customer tracking / status portal"> Customer tracking / status portal</label>
+        <label class="check-item"><input type="checkbox" value="Build brand presence"> Build brand presence</label>
+        <label class="check-item"><input type="checkbox" value="Replace manual/paper process"> Replace manual/paper process</label>
+        <label class="check-item"><input type="checkbox" value="Manage internal operations"> Manage internal operations</label>
+        <label class="check-item"><input type="checkbox" value="Connect multiple branches/staff"> Connect multiple branches/staff</label>
+        <label class="check-item"><input type="checkbox" value="Automate billing / reporting"> Automate billing / reporting</label>
+      </div>
+      <div class="other-line"><span class="mono" style="font-size:12px;">Other:</span><input type="text" id="goalOther" placeholder="Any other goal not listed above"></div>
+    </fieldset>
+  </div>
+
+  <div class="section" id="sec-5">
+    <div class="sec-num mono">05</div>
+    <div class="sec-title">Target audience / users<span class="req">*</span></div>
+    <div class="field">
+      <label for="audience">Who will use this — customers, staff, or both?</label>
+      <textarea id="audience" required aria-required="true" placeholder="Describe who will use this — customers, staff, or both"></textarea>
+    </div>
+  </div>
+
+  <div class="section" id="sec-5b">
+    <div class="sec-num mono">05B</div>
+    <div class="sec-title">Understanding your situation</div>
+    <div class="sec-note">These questions help us understand not just what you want, but why — so the final product actually solves your problem.</div>
+    <div class="field">
+      <label for="dscCurrentProcess">How do you handle this today? (current process)</label>
+      <textarea id="dscCurrentProcess" placeholder="Describe how you currently handle this — phone orders, paper register, spreadsheet, etc."></textarea>
+    </div>
+    <div class="field">
+      <label for="dscPain">What is the biggest problem / frustration with the current way?</label>
+      <textarea id="dscPain" placeholder="Describe the biggest problem with how things work today"></textarea>
+    </div>
+    <div class="field">
+      <label for="dscWhyNow">Why now — what triggered this decision?</label>
+      <textarea id="dscWhyNow" placeholder="Explain what's driving this decision now"></textarea>
+    </div>
+    <div class="field">
+      <label for="dscSuccess">What does success look like 6 months after launch?</label>
+      <textarea id="dscSuccess" placeholder="Describe what success looks like 6 months after launch"></textarea>
+    </div>
+    <div class="row" style="align-items:stretch;">
+      <div class="field" style="display:flex;flex-direction:column;">
+        <label for="dscDecisionMaker" style="min-height:40px;">Who makes the final decision on this project?</label>
+        <input type="text" id="dscDecisionMaker" placeholder="Name the person who gives final approval">
+      </div>
+      <div class="field" style="display:flex;flex-direction:column;">
+        <label for="dscCompetitor" style="min-height:40px;">A competitor / similar business whose online presence you admire?</label>
+        <input type="text" id="dscCompetitor" placeholder="Name or link — helps us understand your market">
+      </div>
+    </div>
+    <div class="field">
+      <label for="dscAvoid">Anything you specifically DON'T want?</label>
+      <textarea id="dscAvoid" rows="2" placeholder="List anything you specifically want to avoid"></textarea>
+    </div>
+  </div>
+
+  <div class="section" id="sec-6">
+    <div class="sec-num mono">06</div>
+    <div class="sec-title">Pages / screens needed</div>
+    <fieldset>
+      <legend>Select pages / screens</legend>
+      <div class="check-grid" id="pagesGrid">
+        <label class="check-item"><input type="checkbox" value="Home" data-tag="all"> Home</label>
+        <label class="check-item"><input type="checkbox" value="About" data-tag="all"> About</label>
+        <label class="check-item"><input type="checkbox" value="Services / Products" data-tag="all"> Services / Products</label>
+        <label class="check-item"><input type="checkbox" value="Menu (food)" data-tag="food"> Menu (food business)</label>
+        <label class="check-item"><input type="checkbox" value="Shop / Product catalog" data-tag="shop"> Shop / Product catalog</label>
+        <label class="check-item"><input type="checkbox" value="Room / Listing catalog" data-tag="listing"> Room / Listing catalog</label>
+        <label class="check-item"><input type="checkbox" value="Gallery" data-tag="visual"> Gallery</label>
+        <label class="check-item"><input type="checkbox" value="Blog / News" data-tag="content"> Blog / News</label>
+        <label class="check-item"><input type="checkbox" value="Order / Booking page" data-tag="booking"> Order / Booking page</label>
+        <label class="check-item"><input type="checkbox" value="Tracking / Client portal" data-tag="tracking"> Tracking / Client portal</label>
+        <label class="check-item"><input type="checkbox" value="Courses / Programs" data-tag="edu"> Courses / Programs</label>
+        <label class="check-item"><input type="checkbox" value="Doctor / Staff profiles" data-tag="staff"> Doctor / Staff profiles</label>
+        <label class="check-item"><input type="checkbox" value="Testimonials / Reviews" data-tag="trust"> Testimonials / Reviews</label>
+        <label class="check-item"><input type="checkbox" value="Admin / Backoffice screens" data-tag="software"> Admin / Backoffice screens</label>
+        <label class="check-item"><input type="checkbox" value="Reports / Analytics dashboard" data-tag="software"> Reports / Analytics dashboard</label>
+        <label class="check-item"><input type="checkbox" value="User login / role-based views" data-tag="software"> User login / role-based views</label>
+        <label class="check-item"><input type="checkbox" value="FAQ" data-tag="all"> FAQ</label>
+        <label class="check-item"><input type="checkbox" value="Contact" data-tag="all"> Contact</label>
+      </div>
+      <div class="other-line"><span class="mono" style="font-size:12px;">Other:</span><input type="text" id="pagesOther" placeholder="Any other page not listed above"></div>
+    </fieldset>
+  </div>
+
+  <div class="section" id="sec-7">
+    <div class="sec-num mono">07</div>
+    <div class="sec-title">Features needed</div>
+    <fieldset>
+      <legend>Select features</legend>
+      <div class="check-grid" id="featuresGrid">
+        <label class="check-item"><input type="checkbox" value="Online payment (bKash/SSLCommerz/card)" data-tag="payment"> Online payment</label>
+        <label class="check-item"><input type="checkbox" value="Order / shipment tracking" data-tag="tracking"> Order / shipment tracking</label>
+        <label class="check-item"><input type="checkbox" value="Inventory management" data-tag="inventory"> Inventory management</label>
+        <label class="check-item"><input type="checkbox" value="Appointment / table booking" data-tag="booking"> Appointment / booking</label>
+        <label class="check-item"><input type="checkbox" value="Admin dashboard" data-tag="all"> Admin dashboard</label>
+        <label class="check-item"><input type="checkbox" value="Customer login / accounts" data-tag="accounts"> Customer login / accounts</label>
+        <label class="check-item"><input type="checkbox" value="WhatsApp integration" data-tag="all"> WhatsApp integration</label>
+        <label class="check-item"><input type="checkbox" value="SMS / Email notifications" data-tag="notify"> SMS / Email notifications</label>
+        <label class="check-item"><input type="checkbox" value="Multi-language support" data-tag="lang"> Multi-language support</label>
+        <label class="check-item"><input type="checkbox" value="Live chat" data-tag="chat"> Live chat</label>
+        <label class="check-item"><input type="checkbox" value="Invoice / bill generation (PDF)" data-tag="invoice"> Invoice / bill generation (PDF)</label>
+        <label class="check-item"><input type="checkbox" value="Delivery / dispatch management" data-tag="delivery"> Delivery / dispatch management</label>
+        <label class="check-item"><input type="checkbox" value="Menu with price list" data-tag="food"> Menu with price list</label>
+        <label class="check-item"><input type="checkbox" value="Availability calendar" data-tag="listing"> Availability calendar</label>
+        <label class="check-item"><input type="checkbox" value="Class / membership scheduling" data-tag="edu"> Class / membership scheduling</label>
+        <label class="check-item"><input type="checkbox" value="Listing search filters" data-tag="realestate"> Listing search filters</label>
+        <label class="check-item"><input type="checkbox" value="Google Maps location" data-tag="location"> Google Maps location</label>
+        <label class="check-item"><input type="checkbox" value="Role-based permissions" data-tag="software"> Role-based permissions</label>
+        <label class="check-item"><input type="checkbox" value="Multi-branch / multi-location support" data-tag="software"> Multi-branch support</label>
+        <label class="check-item"><input type="checkbox" value="Data import / export (Excel/CSV)" data-tag="software"> Data import / export</label>
+        <label class="check-item"><input type="checkbox" value="Audit log / activity history" data-tag="software"> Audit log / activity history</label>
+        <label class="check-item"><input type="checkbox" value="Offline mode / low-connectivity support" data-tag="software"> Offline mode</label>
+        <label class="check-item"><input type="checkbox" value="API for third-party integration" data-tag="software"> API access</label>
+      </div>
+      <div class="other-line"><span class="mono" style="font-size:12px;">Other:</span><input type="text" id="featuresOther" placeholder="Any other feature not listed above"></div>
+    </fieldset>
+  </div>
+
+  <div class="section" id="sec-7b" style="display:none;">
+    <div class="sec-num mono">07B</div>
+    <div class="sec-title">Online store details</div>
+    <div class="sec-note">For selling online — helps us design the checkout, delivery, and tax flow correctly.</div>
+    <div class="row">
+      <div class="field">
+        <label for="stProductCount">Approximate number of products</label>
+        <select id="stProductCount">
+          <option value="">— select —</option>
+          <option>1–20</option><option>21–100</option><option>101–500</option><option>500+</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="stPayment">Payment collection</label>
+        <select id="stPayment">
+          <option value="">— select —</option>
+          <option>Cash on delivery (COD) only</option>
+          <option>Online payment only</option>
+          <option>Both COD and online payment</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="stTax">VAT / tax handling</label>
+        <select id="stTax">
+          <option value="">— select —</option>
+          <option>Prices include VAT</option>
+          <option>VAT added at checkout</option>
+          <option>Not applicable / not sure</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="stDelivery">Delivery / shipping zones</label>
+      <input type="text" id="stDelivery" placeholder="Enter your delivery / shipping zones">
+    </div>
+    <div class="field">
+      <label for="stReturns">Return / refund policy</label>
+      <input type="text" id="stReturns" placeholder="Describe your return / refund policy">
+    </div>
+  </div>
+
+  <div class="section" id="sec-8" style="display:none;">
+    <div class="sec-num mono">08</div>
+    <div class="sec-title">Custom software details</div>
+    <div class="sec-note">Only needed if you're building a custom application, internal tool, or SaaS product rather than (or in addition to) a website.</div>
+
+    <div class="field">
+      <label for="swPurpose">Core purpose — what problem does this solve?</label>
+      <textarea id="swPurpose" placeholder="Describe the core problem this software should solve"></textarea>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="swRoles">Who will use it? (user roles)</label>
+        <input type="text" id="swRoles" placeholder="List the user roles who will use this">
+      </div>
+      <div class="field">
+        <label for="swUserCount">Expected number of users</label>
+        <select id="swUserCount">
+          <option value="">— select —</option>
+          <option>Just me / 1 user</option>
+          <option>2–10 users (small team)</option>
+          <option>11–50 users</option>
+          <option>50–200 users</option>
+          <option>200+ users / public-facing</option>
+        </select>
+      </div>
+    </div>
+
+    <fieldset>
+      <legend>Core modules likely needed</legend>
+      <div class="check-grid" id="swModulesGrid">
+        <label class="check-item"><input type="checkbox" value="User & role management"> User & role management</label>
+        <label class="check-item"><input type="checkbox" value="Reporting / analytics dashboard"> Reporting / analytics dashboard</label>
+        <label class="check-item"><input type="checkbox" value="Billing / invoicing engine"> Billing / invoicing engine</label>
+        <label class="check-item"><input type="checkbox" value="Document/file upload & storage"> Document/file upload & storage</label>
+        <label class="check-item"><input type="checkbox" value="Notification system (email/SMS)"> Notification system</label>
+        <label class="check-item"><input type="checkbox" value="Approval / workflow steps"> Approval / workflow steps</label>
+        <label class="check-item"><input type="checkbox" value="Search & filtering"> Search & filtering</label>
+        <label class="check-item"><input type="checkbox" value="Audit trail / activity log"> Audit trail</label>
+        <label class="check-item"><input type="checkbox" value="Data import from Excel/legacy system"> Data import from Excel/legacy</label>
+        <label class="check-item"><input type="checkbox" value="Multi-branch / multi-tenant support"> Multi-branch / multi-tenant</label>
+        <label class="check-item"><input type="checkbox" value="Subscription/payment billing (if SaaS)"> Subscription billing (SaaS)</label>
+        <label class="check-item"><input type="checkbox" value="Integration with government/customs systems"> Govt/customs system integration</label>
+      </div>
+    </fieldset>
+
+    <div class="field" style="margin-top:16px;">
+      <label for="swIntegrations">Integrations needed (existing systems, APIs, payment/SMS gateways)</label>
+      <textarea id="swIntegrations" placeholder="List systems, APIs, or payment/SMS gateways to integrate with"></textarea>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="swPlatform">Platform</label>
+        <select id="swPlatform">
+          <option value="">— select —</option>
+          <option>Web only (browser-based)</option>
+          <option>Web + mobile app</option>
+          <option>Mobile app only</option>
+          <option>Desktop application</option>
+          <option>Not sure — need advice</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="swDataSensitivity">Data sensitivity</label>
+        <select id="swDataSensitivity">
+          <option value="">— select —</option>
+          <option>Public data only</option>
+          <option>Internal business data</option>
+          <option>Sensitive/personal data (needs extra security)</option>
+          <option>Financial/regulatory data (needs compliance)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="swHosting">Hosting preference</label>
+        <select id="swHosting">
+          <option value="">— select —</option>
+          <option>No preference — you decide</option>
+          <option>Cloud-managed (Cloudflare/Vercel style)</option>
+          <option>Specific cloud provider required</option>
+          <option>On-premise / self-hosted required</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="swMigration">Existing system to replace or migrate data from</label>
+        <input type="text" id="swMigration" placeholder="Name the existing system or data to migrate from">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="swScale">Growth / scale expectation (next 1–2 years)</label>
+      <textarea id="swScale" placeholder="Describe your expected growth over the next 1–2 years"></textarea>
+    </div>
+  </div>
+
+  <div class="section" id="sec-9">
+    <div class="sec-num mono">09</div>
+    <div class="sec-title">Design preference</div>
+    <div class="row">
+      <div class="field">
+        <label for="style">Style</label>
+        <select id="style">
+          <option value="">— select —</option>
+          <option>Modern / minimal</option>
+          <option>Corporate / professional</option>
+          <option>Warm / friendly</option>
+          <option>Bold / colorful</option>
+          <option>Luxury / premium</option>
+          <option>Functional / data-dense (dashboards, internal tools)</option>
+          <option>No preference — you decide</option>
+        </select>
+      </div>
+      <div class="field"><label for="colors">Preferred colors (if any)</label><input type="text" id="colors" placeholder="Enter your preferred colors or brand palette"></div>
+    </div>
+    <div class="field"><label for="refSites">Websites/apps you like (as reference)</label><input type="text" id="refSites" placeholder="Any URLs, app names, or brands you like the look of"></div>
+  </div>
+
+  <div class="section" id="sec-9b">
+    <div class="sec-num mono">09B</div>
+    <div class="sec-title">Language &amp; localization</div>
+    <fieldset>
+      <legend>Languages the site/app should support</legend>
+      <div class="check-grid" id="langGrid">
+        <label class="check-item"><input type="checkbox" value="Bangla"> Bangla</label>
+        <label class="check-item"><input type="checkbox" value="English"> English</label>
+        <label class="check-item"><input type="checkbox" value="Arabic"> Arabic</label>
+        <label class="check-item"><input type="checkbox" value="Hindi"> Hindi</label>
+      </div>
+      <div class="other-line"><span class="mono" style="font-size:12px;">Other:</span><input type="text" id="langOther" placeholder="Any other language not listed above"></div>
+    </fieldset>
+    <div class="row" style="margin-top:16px;">
+      <div class="field">
+        <label for="primaryLang">Primary language (default)</label>
+        <select id="primaryLang">
+          <option value="">— select —</option>
+          <option>Bangla</option><option>English</option><option>Arabic</option><option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Right-to-left (RTL) layout needed? (for Arabic/Urdu etc.)</label>
+        <div class="radio-row" role="radiogroup" aria-label="RTL support">
+          <div class="radio-item"><input type="radio" name="rtl" value="yes" id="rtl1"><label for="rtl1">Yes</label></div>
+          <div class="radio-item"><input type="radio" name="rtl" value="no" id="rtl2"><label for="rtl2">No</label></div>
+          <div class="radio-item"><input type="radio" name="rtl" value="unsure" id="rtl3"><label for="rtl3">Not sure</label></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="sec-10">
+    <div class="sec-num mono">10</div>
+    <div class="sec-title">Content readiness</div>
+    <div class="row">
+      <div class="field">
+        <label for="logoStatus">Logo</label>
+        <select id="logoStatus"><option value="">— select —</option><option>Have a logo ready</option><option>Need logo design</option><option>No logo needed</option></select>
+      </div>
+      <div class="field">
+        <label for="photoStatus">Photos / product images</label>
+        <select id="photoStatus"><option value="">— select —</option><option>Have photos ready</option><option>Need photography</option><option>Will use stock images</option></select>
+      </div>
+      <div class="field">
+        <label for="copyStatus">Text content (about, descriptions)</label>
+        <select id="copyStatus"><option value="">— select —</option><option>Will provide text</option><option>Need help writing content</option></select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="brandGuide">Brand guideline / fonts</label>
+        <select id="brandGuide">
+          <option value="">— select —</option>
+          <option>Have a brand guideline document</option>
+          <option>Have specific fonts/colors only</option>
+          <option>Nothing — build fresh identity</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="contentVolume">Approximate content volume</label>
+        <input type="text" id="contentVolume" placeholder="Give a rough estimate of pages/products/items">
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="sec-10b">
+    <div class="sec-num mono">10B</div>
+    <div class="sec-title">SEO &amp; marketing</div>
+    <div class="row">
+      <div class="field">
+        <label for="gBusiness">Google Business profile</label>
+        <select id="gBusiness">
+          <option value="">— select —</option>
+          <option>Already have one</option>
+          <option>Need help setting up</option>
+          <option>Not needed</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="analytics">Visitor analytics wanted?</label>
+        <select id="analytics">
+          <option value="">— select —</option>
+          <option>Yes — want to see visitor numbers</option>
+          <option>No / not now</option>
+          <option>Not sure what this is</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="seoKeywords">What should customers type in Google to find you?</label>
+      <input type="text" id="seoKeywords" placeholder="Enter the search terms customers would use to find you">
+    </div>
+    <div class="field">
+      <label for="socialChannels">Social channels to link/integrate</label>
+      <input type="text" id="socialChannels" placeholder="List your social media pages to link">
+    </div>
+  </div>
+
+  <div class="section" id="sec-11">
+    <div class="sec-num mono">11</div>
+    <div class="sec-title">Domain &amp; hosting</div>
+    <div class="row">
+      <div class="field">
+        <label for="domainStatus">Domain name</label>
+        <select id="domainStatus"><option value="">— select —</option><option>Already own a domain</option><option>Need help buying one</option><option>Not sure yet</option></select>
+      </div>
+      <div class="field"><label for="domainName">Domain name (if you have one/idea)</label><input type="text" id="domainName" placeholder="Enter your domain name, if you have one"></div>
+    </div>
+  </div>
+
+  <div class="section" id="sec-11b">
+    <div class="sec-num mono">11B</div>
+    <div class="sec-title">Legal &amp; compliance</div>
+    <div class="sec-note">Note: we can add the pages/banners technically, but the legal text itself should be reviewed by your own lawyer — we do not provide legal advice.</div>
+    <div class="row" style="align-items:stretch;">
+      <div class="field" style="display:flex;flex-direction:column;">
+        <label for="privacyPages" style="min-height:40px;">Privacy policy / Terms pages needed?</label>
+        <select id="privacyPages">
+          <option value="">— select —</option>
+          <option>Yes — need both pages</option>
+          <option>Have existing text to use</option>
+          <option>Not needed</option>
+          <option>Not sure</option>
+        </select>
+      </div>
+      <div class="field" style="display:flex;flex-direction:column;">
+        <label for="cookieConsent" style="min-height:40px;">Cookie consent banner needed?</label>
+        <select id="cookieConsent">
+          <option value="">— select —</option>
+          <option>Yes</option>
+          <option>No</option>
+          <option>Not sure — advise me</option>
+        </select>
+      </div>
+      <div class="field" style="display:flex;flex-direction:column;">
+        <label for="foreignMarket" style="min-height:40px;">Will you serve customers in EU / foreign markets?</label>
+        <select id="foreignMarket">
+          <option value="">— select —</option>
+          <option>Bangladesh only</option>
+          <option>Bangladesh + Gulf countries</option>
+          <option>Includes EU customers</option>
+          <option>Global</option>
+        </select>
+        <div class="hint">EU customers may bring data-protection (GDPR) requirements — confirm specifics with a lawyer.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="sec-11c">
+    <div class="sec-num mono">11C</div>
+    <div class="sec-title">Ownership &amp; handover</div>
+    <div class="sec-note">Deciding these now prevents the most common disputes later.</div>
+    <div class="row">
+      <div class="field">
+        <label for="accountOwner">Domain &amp; hosting accounts in whose name?</label>
+        <select id="accountOwner">
+          <option value="">— select —</option>
+          <option>My own accounts (I keep full control)</option>
+          <option>Developer manages, transfers to me later</option>
+          <option>Developer manages permanently (with monthly fee)</option>
+          <option>Not sure — advise me</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="contentUpdater">After launch, who updates content?</label>
+        <select id="contentUpdater">
+          <option value="">— select —</option>
+          <option>I / my staff will update (need admin training)</option>
+          <option>Developer updates (monthly support)</option>
+          <option>Rarely needs updating</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="trainingNeeded">Training / handover documentation needed?</label>
+        <select id="trainingNeeded">
+          <option value="">— select —</option>
+          <option>Yes — video/written guide + a training session</option>
+          <option>Written guide is enough</option>
+          <option>Not needed</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="adminAccess">Who should have admin access?</label>
+        <input type="text" id="adminAccess" placeholder="List who should have admin access">
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="sec-12">
+    <div class="sec-num mono">12</div>
+    <div class="sec-title">Budget &amp; timeline<span class="req">*</span></div>
+    <div class="row">
+      <div class="field">
+        <label for="currency">Currency</label>
+        <select id="currency">
+          <option>BDT — Bangladeshi Taka</option>
+          <option>USD — US Dollar</option>
+          <option>EUR — Euro</option>
+          <option>GBP — British Pound</option>
+          <option>SAR — Saudi Riyal</option>
+          <option>AED — UAE Dirham</option>
+          <option>QAR — Qatari Riyal</option>
+          <option>KWD — Kuwaiti Dinar</option>
+          <option>OMR — Omani Rial</option>
+          <option>BHD — Bahraini Dinar</option>
+          <option>INR — Indian Rupee</option>
+          <option>PKR — Pakistani Rupee</option>
+          <option>MYR — Malaysian Ringgit</option>
+          <option>SGD — Singapore Dollar</option>
+          <option>JPY — Japanese Yen</option>
+          <option>CNY — Chinese Yuan</option>
+          <option>AUD — Australian Dollar</option>
+          <option>CAD — Canadian Dollar</option>
+          <option>TRY — Turkish Lira</option>
+          <option>ZAR — South African Rand</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="budget">Budget range<span class="req">*</span></label>
+        <select id="budget" required aria-required="true">
+          <option value="">— select —</option>
+          <option>Under 10,000</option><option>10,000 – 25,000</option><option>25,000 – 50,000</option>
+          <option>50,000 – 100,000</option><option>100,000 – 300,000</option><option>Above 300,000</option>
+          <option>Not sure — need a quote</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="timeline">Desired timeline<span class="req">*</span></label>
+        <select id="timeline" required aria-required="true">
+          <option value="">— select —</option>
+          <option>ASAP / within 1 week</option><option>2–4 weeks</option><option>1–2 months</option>
+          <option>3+ months (phased build)</option><option>Flexible</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Ongoing maintenance / support needed after launch?</label>
+      <div class="radio-row" role="radiogroup" aria-label="Maintenance preference">
+        <div class="radio-item"><input type="radio" name="maintenance" value="yes" id="mt1"><label for="mt1">Yes, monthly support</label></div>
+        <div class="radio-item"><input type="radio" name="maintenance" value="no" id="mt2"><label for="mt2">No, one-time build only</label></div>
+        <div class="radio-item"><input type="radio" name="maintenance" value="unsure" id="mt3"><label for="mt3">Not sure yet</label></div>
+      </div>
+    </div>
+    <div class="field">
+      <label for="phasePlan">Phase planning — what's needed NOW vs what can come LATER?</label>
+      <textarea id="phasePlan" rows="2" placeholder="Describe what's needed now vs. what can come later"></textarea>
+      <div class="hint">Splitting into phases usually lowers the starting cost and gets you live faster.</div>
+    </div>
+  </div>
+
+  <div class="section" id="sec-13" style="display:none;">
+    <div class="sec-num mono">13</div>
+    <div class="sec-title" id="bizSpecificTitle">Business-specific details</div>
+    <div class="sec-note" id="bizSpecificNote"></div>
+    <div id="bizQuestions"></div>
+    <div class="field">
+      <label for="bizSpecificField">Anything else specific to your industry</label>
+      <textarea id="bizSpecificField" rows="3"></textarea>
+    </div>
+  </div>
+
+  <div class="section" id="sec-14">
+    <div class="sec-num mono">14</div>
+    <div class="sec-title">Anything else</div>
+    <div class="field">
+      <label for="notes">Additional notes / special requirements</label>
+      <textarea id="notes" placeholder="Anything not covered above — competitors, must-haves, things to avoid, etc."></textarea>
+    </div>
+  </div>
+
+  <div class="section" id="sec-15">
+    <div class="sec-num mono">15</div>
+    <div class="sec-title">Declaration &amp; agreement<span class="req" aria-hidden="true">*</span></div>
+    <div class="sec-note">Please read the engagement terms below, then confirm by typing your full name.</div>
+
+    <!-- DEVELOPER NOTE: These terms are a general template. Set your own payment percentages, revision count,
+         and validity period. If a legally enforceable contract is needed, have a lawyer review it. -->
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:3px;padding:20px 24px;margin-bottom:18px;box-shadow:var(--shadow-sm);">
+      <div class="mono" style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--stamp-teal-deep);margin-bottom:12px;">Engagement Terms</div>
+      <ol style="margin:0;padding-left:20px;font-size:13.5px;line-height:1.7;">
+        <li><strong>Scope.</strong> The work covers only what is written in this requirement sheet. Any feature or change requested later that is not listed here will be treated as additional work and quoted separately.</li>
+        <li><strong>Quotation.</strong> A written quotation will be provided based on this sheet. Work begins only after the quotation is accepted and the agreed advance payment is received.</li>
+        <li><strong>Payment.</strong> Payment terms (advance percentage, milestones, final balance) will be stated in the quotation. The final deliverable is handed over after full payment.</li>
+        <li><strong>Revisions.</strong> The quotation will state the number of included revision rounds. Revisions beyond that are billed as additional work.</li>
+        <li><strong>Client materials.</strong> The delivery timeline depends on the client providing required content (text, images, logo, access credentials) on time. Delays in providing materials extend the timeline accordingly.</li>
+        <li><strong>Ownership.</strong> Full ownership of the delivered website/software transfers to the client upon receipt of final payment. Until then, the work remains the property of the developer.</li>
+        <li><strong>Confidentiality.</strong> All business information shared in this form and during the project is kept confidential and used only for this project.</li>
+        <li><strong>Third-party costs.</strong> Domain, hosting, SMS/payment gateway, and similar third-party fees are payable by the client and are separate from the development fee unless stated otherwise in the quotation.</li>
+      </ol>
+    </div>
+
+    <div class="field">
+      <label class="check-item" style="font-size:14.5px;">
+        <input type="checkbox" id="agreeCheck">
+        <span>I have read and understood the engagement terms above. I confirm that the information provided in this form is accurate to the best of my knowledge, and I understand this sheet will be the basis of the project quotation.</span>
+      </label>
+    </div>
+
+    <div class="field">
+      <label class="check-item" style="font-size:14px;">
+        <input type="checkbox" id="ndaCheck">
+        <span>My project involves confidential business ideas — I would like to discuss signing an NDA (non-disclosure agreement) before sharing further details.</span>
+      </label>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="signName">Full name (type as signature)<span class="req">*</span></label>
+        <input type="text" id="signName" placeholder="Type your full legal name" autocomplete="name" style="font-family:'Spectral',serif;font-style:italic;font-size:17px;border-bottom:2px solid var(--ink);">
+      </div>
+      <div class="field">
+        <label>Date</label>
+        <input type="text" id="signDate" readonly style="background:transparent;border:none;border-bottom:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:13px;">
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button id="generateBtn" type="button">Generate summary</button>
+    <button id="submitBtn" type="button" style="display:none;background:var(--stamp-teal);color:#fff;">Send report by email</button>
+    <button id="copyBtn" type="button" style="display:none;">Copy summary</button>
+    <button id="printBtn" type="button" style="display:none;">Print / Save PDF</button>
+    <button id="resetBtn" type="button" style="border-color:var(--muted);color:var(--muted);">Reset form</button>
+    <span id="status" role="status"></span>
+  </div>
+
+  <div id="summaryWrap">
+    <div class="sec-title" style="font-size:16px;">Summary</div>
+    <div id="summaryBox"></div>
+  </div>
+
+</main>
+
+<footer></footer>
+
+<script>
+// ---------- business type list ----------
+const BIZ_TYPES = [
+  "Shipping / C&F / Freight agent","Import / Export trading","Logistics / Courier / Delivery service",
+  "E-commerce / Online store","Retail shop","Grocery / Pharmacy","Electronics / Mobile shop","Furniture",
+  "Jewelry","Textile / Garments","Restaurant / Fast food","Cafe / Bakery","Salon / Spa / Beauty",
+  "Repair / Technician service","Consulting / Professional service","Manufacturing / Wholesale",
+  "Agriculture / Agro business","Education / Training / Coaching","Healthcare / Clinic / Doctor",
+  "Veterinary / Pet care","Real estate","Hotel / Resort","Travel / Tour agency","Car rental",
+  "Gym / Fitness center","Sports club / Academy","Automotive (dealer / garage)","Construction / Contractor",
+  "Event management","Photography / Creative agency","Media / News portal","Music / Entertainment",
+  "Law firm / Legal service","Insurance agency","Bank / NBFI / Fintech","Daycare / Childcare",
+  "Co-working space / Warehouse rental","Association / Chamber / Union","NGO / Non-profit",
+  "IT / Software company","Freelancer / Personal portfolio","Government / Public sector project",
+  "Other"
+];
+const bizTypeSelect = document.getElementById('bizType');
+bizTypeSelect.innerHTML = '<option value="">— select —</option>' + BIZ_TYPES.map(t=>'<option>'+t+'</option>').join('');
+
+// ---------- recommendation map ----------
+const RECO = {
+  "Shipping / C&F / Freight agent": {tags:["tracking","invoice","notify","software","all"],
+    note:"Tracking, invoice generation, and client notifications matter most for CNF/freight work.",
+    tip:"Since billing logic (wharfrent, demurrage slabs) is often the hardest part, capture the exact calculation rules early — this usually needs more discovery time than the visual design.",
+    specTitle:"Cargo & shipment details", specNote:"Helps scope the tracking/billing logic.",
+    specPh:"e.g. types of cargo handled, number of active clients, vessel/BOL tracking needed, wharfrent/demurrage billing logic, CF agent coordination features"},
+  "Import / Export trading": {tags:["shop","invoice","tracking","software","all"],
+    note:"Trading businesses usually need product/shipment catalogs, LC/documentation tracking, and invoicing.",
+    tip:"Ask whether they need multi-currency support — export/import pricing often involves USD alongside BDT.",
+    specTitle:"Trade details", specNote:"", specPh:"e.g. products traded, countries involved, LC/documentation workflow, currency needs"},
+  "Logistics / Courier / Delivery service": {tags:["tracking","delivery","notify","software","all"],
+    note:"Real-time delivery tracking and dispatch management are usually the core need.",
+    tip:"Clarify if they need a rider/driver-facing mobile view in addition to the customer-facing tracking page — these are two different interfaces.",
+    specTitle:"Fleet & delivery details", specNote:"", specPh:"e.g. number of riders/vehicles, delivery zones, real-time GPS tracking needed, COD handling"},
+  "E-commerce / Online store": {tags:["shop","payment","inventory","accounts","delivery","all"],
+    note:"Product catalog, online payment, inventory, and delivery management are the core.",
+    tip:"Ask about return/refund policy early — it affects checkout flow and order-status states in the system.",
+    specTitle:"Store & catalog details", specNote:"Helps scope product structure and checkout flow.",
+    specPh:"e.g. number of products, categories, variants (size/color), delivery areas, return/refund policy"},
+  "Retail shop": {tags:["shop","payment","inventory","all"],
+    note:"Product catalog, inventory, and payment — similar to e-commerce but often smaller scale.",
+    tip:"Confirm single vs multi-branch — inventory logic differs a lot if stock is shared across locations.",
+    specTitle:"Shop details", specNote:"", specPh:"e.g. number of products, in-store pickup vs delivery, single or multiple branches"},
+  "Grocery / Pharmacy": {tags:["shop","payment","inventory","delivery","all"],
+    note:"Fast delivery, inventory sync, and simple reorder for regular customers matter most.",
+    tip:"For pharmacy, ask if prescription upload/verification is required — this adds a compliance step to the order flow.",
+    specTitle:"Inventory & delivery details", specNote:"", specPh:"e.g. number of SKUs, delivery time expectation, prescription upload needed (pharmacy)"},
+  "Electronics / Mobile shop": {tags:["shop","payment","inventory","all"],
+    note:"Product catalog with specs/comparison and warranty tracking are common needs.",
+    tip:"Ask if warranty/service tickets need tracking after sale — many electronics shops need this and forget to mention it upfront.",
+    specTitle:"Product & warranty details", specNote:"", specPh:"e.g. number of products, brands carried, warranty/service tracking needed"},
+  "Furniture": {tags:["shop","visual","booking","all"],
+    note:"Visual catalog and custom-order inquiry are usually more important than instant checkout.",
+    tip:"Large/custom items often need a quote-request flow rather than fixed-price checkout — confirm which applies.",
+    specTitle:"Catalog details", specNote:"", specPh:"e.g. ready-made vs custom orders, delivery/installation service, showroom locations"},
+  "Jewelry": {tags:["shop","visual","trust","payment","all"],
+    note:"High-quality visual catalog and trust signals (certification, purity) matter a lot here.",
+    tip:"Ask about price transparency — some jewelry businesses show fixed prices, others require inquiry due to fluctuating gold rates.",
+    specTitle:"Catalog & trust details", specNote:"", specPh:"e.g. gold rate-linked pricing, certification display, custom design requests"},
+  "Textile / Garments": {tags:["shop","inventory","trust","all"],
+    note:"Catalog with size/variant options and B2B bulk inquiry are common needs.",
+    tip:"Clarify retail (B2C) vs wholesale (B2B) — bulk order minimums and pricing tiers change the whole flow.",
+    specTitle:"Product & B2B details", specNote:"", specPh:"e.g. product categories, minimum order quantity, export markets, size charts"},
+  "Restaurant / Fast food": {tags:["food","booking","delivery","payment","all"],
+    note:"Menu with prices, online ordering, table/delivery booking, and payment are core.",
+    tip:"Ask about peak-hour order volume — if it's high, order-queue/kitchen-display logic becomes important, not just the customer-facing menu.",
+    specTitle:"Menu & delivery details", specNote:"", specPh:"e.g. number of menu items, dine-in/delivery/both, delivery radius, average order prep time"},
+  "Cafe / Bakery": {tags:["food","booking","payment","visual","all"],
+    note:"Menu, gallery of items, and simple order/pre-order feature matter most.",
+    tip:"Pre-order for events (cakes, catering) often needs a separate booking flow from regular walk-in orders.",
+    specTitle:"Menu & product details", specNote:"", specPh:"e.g. number of items, pre-order for events/cakes, delivery or pickup only"},
+  "Salon / Spa / Beauty": {tags:["booking","staff","visual","payment","all"],
+    note:"Appointment booking, staff/stylist profiles, and a gallery of work are key.",
+    tip:"Ask if booking should be by specific staff member — this changes the calendar logic from simple slot-booking.",
+    specTitle:"Services & staff details", specNote:"", specPh:"e.g. number of services, number of staff/stylists, booking by staff member or service"},
+  "Repair / Technician service": {tags:["booking","tracking","notify","all"],
+    note:"Service request booking and job/repair status tracking are the core need.",
+    tip:"Ask if customers need to see live repair status (like a shipment tracker) — this is a common upsell over a basic contact form.",
+    specTitle:"Service details", specNote:"", specPh:"e.g. types of repairs offered, on-site vs drop-off, estimated turnaround time"},
+  "Consulting / Professional service": {tags:["booking","trust","content","all"],
+    note:"Service pages, testimonials, and a booking/inquiry form are usually enough.",
+    tip:"Case studies/portfolio pieces build more trust than generic service descriptions — worth prioritizing in content.",
+    specTitle:"Service details", specNote:"", specPh:"e.g. services offered, typical engagement length, case studies to feature"},
+  "Manufacturing / Wholesale": {tags:["shop","inventory","trust","software","all"],
+    note:"Catalog, bulk inquiry form, and trust-building content (certifications, clients) matter most.",
+    tip:"B2B buyers often want a downloadable spec sheet/catalog PDF per product — worth planning for.",
+    specTitle:"Product & B2B details", specNote:"", specPh:"e.g. product categories, minimum order quantity, export markets, certifications to display"},
+  "Agriculture / Agro business": {tags:["shop","tracking","all"],
+    note:"Product catalog and seasonal availability info are common needs.",
+    tip:"If selling to both retail and bulk buyers, plan two pricing tiers from the start.",
+    specTitle:"Product details", specNote:"", specPh:"e.g. products/crops sold, seasonal vs year-round, retail and/or bulk buyers"},
+  "Education / Training / Coaching": {tags:["edu","booking","staff","payment","all"],
+    note:"Course catalog, enrollment/payment, and instructor profiles are core.",
+    tip:"Ask if certificates need to be auto-generated on course completion — a common but easy-to-miss requirement.",
+    specTitle:"Course details", specNote:"", specPh:"e.g. number of courses, online/offline/both, certificate issuance, batch scheduling"},
+  "Healthcare / Clinic / Doctor": {tags:["booking","staff","tracking","software","all"],
+    note:"Doctor profiles, appointment booking, and patient record/report access are key.",
+    tip:"Patient data is sensitive — flag this early so hosting/security decisions account for it, not added later.",
+    specTitle:"Clinic & doctor details", specNote:"", specPh:"e.g. number of doctors/specialties, appointment slots, patient report access"},
+  "Veterinary / Pet care": {tags:["booking","staff","all"],
+    note:"Appointment booking and service listing are the core need.",
+    tip:"Ask if they want vaccination/reminder notifications — a popular add-on for repeat pet-care visits.",
+    specTitle:"Service details", specNote:"", specPh:"e.g. services offered, appointment booking, reminder notifications"},
+  "Real estate": {tags:["listing","realestate","visual","trust","all"],
+    note:"Property listings with search filters and a gallery are core.",
+    tip:"Ask if listings need to sync from an existing spreadsheet/CRM, or will be entered manually — changes the admin design.",
+    specTitle:"Listing details", specNote:"", specPh:"e.g. number of listings, rent/sale/both, areas covered, virtual tour needed"},
+  "Hotel / Resort": {tags:["listing","booking","payment","visual","all"],
+    note:"Room catalog, availability calendar, and online booking with payment are core.",
+    tip:"Ask about seasonal/dynamic pricing — flat pricing is much simpler to build than date-based rate changes.",
+    specTitle:"Property details", specNote:"", specPh:"e.g. number of rooms/room types, booking engine needed, seasonal pricing"},
+  "Travel / Tour agency": {tags:["listing","booking","payment","visual","all"],
+    note:"Tour packages, booking, and a strong photo gallery matter most.",
+    tip:"Group tours vs fully custom itineraries need different booking flows — clarify which is the main offering.",
+    specTitle:"Package details", specNote:"", specPh:"e.g. number of packages/destinations, group vs custom tours, visa assistance info"},
+  "Car rental": {tags:["listing","booking","payment","tracking","all"],
+    note:"Vehicle catalog, availability calendar, and booking with payment are core.",
+    tip:"Ask if they need to track vehicle location/mileage — some rental businesses want basic fleet tracking too.",
+    specTitle:"Fleet details", specNote:"", specPh:"e.g. number of vehicles, with/without driver, insurance/deposit handling"},
+  "Gym / Fitness center": {tags:["edu","booking","payment","all"],
+    note:"Membership plans, class scheduling, and online payment for renewals matter most.",
+    tip:"Ask about attendance tracking (check-in system) — often wanted alongside membership management.",
+    specTitle:"Membership details", specNote:"", specPh:"e.g. membership tiers, class types, trainer profiles"},
+  "Sports club / Academy": {tags:["edu","booking","payment","staff","all"],
+    note:"Program/batch listing, enrollment, and coach profiles are common needs.",
+    tip:"Ask if parents need a separate login to track a child's attendance/progress — common in academies.",
+    specTitle:"Program details", specNote:"", specPh:"e.g. sports offered, age groups, batch scheduling, fee structure"},
+  "Automotive (dealer / garage)": {tags:["shop","booking","tracking","all"],
+    note:"Vehicle/parts listings and service booking with status tracking are core.",
+    tip:"For garages, a repair-status tracker (like a shipment tracker) is a strong differentiator over a plain contact form.",
+    specTitle:"Vehicle / service details", specNote:"", specPh:"e.g. new/used vehicles or repair service, inventory size, service booking needed"},
+  "Construction / Contractor": {tags:["trust","visual","booking","all"],
+    note:"Project gallery, service pages, and a quote request form are the core need.",
+    tip:"Before/after project photos build more trust here than written descriptions — plan the gallery structure accordingly.",
+    specTitle:"Project details", specNote:"", specPh:"e.g. types of projects, past project photos, quote/estimate request flow"},
+  "Event management": {tags:["booking","visual","trust","all"],
+    note:"Portfolio gallery and inquiry/booking form are the core need.",
+    tip:"Package-based pricing display (basic/standard/premium) usually converts better than a plain inquiry form alone.",
+    specTitle:"Event details", specNote:"", specPh:"e.g. event types handled, past event photos, package pricing"},
+  "Photography / Creative agency": {tags:["visual","booking","trust","all"],
+    note:"A strong portfolio gallery and booking/inquiry form matter most.",
+    tip:"Image loading speed matters a lot for portfolio-heavy sites — worth flagging as a technical priority.",
+    specTitle:"Portfolio details", specNote:"", specPh:"e.g. photography/design categories, booking calendar, package pricing"},
+  "Media / News portal": {tags:["content","visual","all"],
+    note:"Article publishing, categories, and a clean reading experience are core.",
+    tip:"Ask about expected daily traffic/article volume — this affects hosting/performance planning significantly.",
+    specTitle:"Content details", specNote:"", specPh:"e.g. expected articles/day, categories, ad placement needs, multiple authors/editors"},
+  "Music / Entertainment": {tags:["content","visual","booking","all"],
+    note:"Portfolio/media showcase and booking/inquiry form are common needs.",
+    tip:"Ask if audio/video needs to be hosted directly or embedded from YouTube/Spotify — affects cost and setup.",
+    specTitle:"Content details", specNote:"", specPh:"e.g. type of content, booking for events, media hosting preference"},
+  "Law firm / Legal service": {tags:["trust","booking","content","all"],
+    note:"Practice area pages, attorney profiles, and a consultation booking form are core.",
+    tip:"Confidential client communication should not go through public contact forms — flag this if intake involves sensitive case details.",
+    specTitle:"Practice details", specNote:"", specPh:"e.g. practice areas, attorney profiles, consultation booking"},
+  "Insurance agency": {tags:["trust","booking","software","all"],
+    note:"Policy/product info, quote request, and claim status tracking are common needs.",
+    tip:"Claim tracking is often the most valuable feature here — clarify if this is in scope or a future phase.",
+    specTitle:"Policy & claims details", specNote:"", specPh:"e.g. policy types offered, quote request flow, claim status tracking needed"},
+  "Bank / NBFI / Fintech": {tags:["software","payment","trust","all"],
+    note:"This category usually needs custom software with strong security/compliance, not just a website.",
+    tip:"Financial data handling likely needs regulatory compliance review — flag this as a specialized requirement early, beyond typical web build scope.",
+    specTitle:"Financial product details", specNote:"", specPh:"e.g. products offered, regulatory requirements, security/compliance needs, transaction volume"},
+  "Daycare / Childcare": {tags:["booking","trust","staff","all"],
+    note:"Program info, enrollment inquiry, and trust-building content (safety, staff) matter most.",
+    tip:"Ask if parents want daily update/photo sharing — a popular feature but adds real scope, confirm if it's needed now or later.",
+    specTitle:"Program details", specNote:"", specPh:"e.g. age groups, programs offered, enrollment process, safety certifications to show"},
+  "Co-working space / Warehouse rental": {tags:["listing","booking","payment","all"],
+    note:"Space listings, availability calendar, and booking/payment are core.",
+    tip:"Ask about hourly/daily/monthly rental tiers — pricing structure affects the booking calendar design.",
+    specTitle:"Space details", specNote:"", specPh:"e.g. number of spaces, rental duration options, amenities to list"},
+  "Association / Chamber / Union": {tags:["content","trust","software","all"],
+    note:"Member directory, announcements, and event listings are common needs.",
+    tip:"Ask if members need individual login for a directory/resource area — this turns it into a small member-management system.",
+    specTitle:"Membership details", specNote:"", specPh:"e.g. number of members, member directory needed, event/notice publishing"},
+  "NGO / Non-profit": {tags:["trust","payment","content","all"],
+    note:"A donation feature, program pages, and impact stories are core.",
+    tip:"Ask about donation receipt/tax documentation needs — often required but easy to overlook until launch.",
+    specTitle:"Program & donation details", specNote:"", specPh:"e.g. programs/causes, donation payment method, volunteer sign-up needed"},
+  "IT / Software company": {tags:["content","trust","software","all"],
+    note:"Service/portfolio pages and case studies matter most for credibility.",
+    tip:"Since this is your own industry, a working demo or live project link converts better than descriptions alone.",
+    specTitle:"Service details", specNote:"", specPh:"e.g. services offered, tech stack to highlight, case studies/portfolio to feature"},
+  "Freelancer / Personal portfolio": {tags:["content","trust","visual","all"],
+    note:"A focused portfolio, skills summary, and contact/booking form are usually enough.",
+    tip:"Keep it to one clear focus area — portfolios that try to show everything tend to convert worse than a focused niche.",
+    specTitle:"Portfolio details", specNote:"", specPh:"e.g. skills/services to highlight, best past work to feature"},
+  "Government / Public sector project": {tags:["software","trust","content","all"],
+    note:"These usually need custom software with formal documentation, accessibility, and approval workflows.",
+    tip:"Expect longer approval cycles and possibly specific hosting/data-residency requirements — plan timeline accordingly.",
+    specTitle:"Project details", specNote:"", specPh:"e.g. department/scope, approval process, accessibility/compliance requirements, data residency rules"},
+  "Other": {tags:["all"], note:"", tip:"", specTitle:"Business-specific details", specNote:"",
+    specPh:"Describe anything specific to your business that the sections above didn't cover."}
+};
+
+// ================== CONFIG ==================
+// Where completed reports should be sent. The "Send report by email" button
+// opens the client's email app with this address pre-filled — no server needed.
+const REPORT_EMAIL = "sa.sumel91@gmail.com";
+// ============================================
+
+// ---------- reference number & date ----------
+const REF_NO = (function(){
+  const d = new Date();
+  const ymd = d.getFullYear().toString() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
+  const rand = String(Math.floor(100000 + Math.random() * 900000));
+  return 'REQ-' + ymd + '-' + rand;
+})();
+document.getElementById('refLine').textContent = 'Reference No: ' + REF_NO;
+
+function val(id){ return document.getElementById(id).value.trim(); }
+function radioVal(name){ const el = document.querySelector('input[name="'+name+'"]:checked'); return el ? el.value : ''; }
+function getCheckedIn(containerId){ return Array.from(document.querySelectorAll('#'+containerId+' input[type=checkbox]:checked')).map(i=>i.value); }
+
+// ---------- industry-specific structured questions ----------
+const INDUSTRY_QUESTIONS = {
+  "Shipping / C&F / Freight agent": [
+    {q:"How do you currently prepare client bills (wharfrent, demurrage, service charges)?", ph:"e.g. manually in Excel per vessel, using the port tariff book"},
+    {q:"What should a client see when they log in to track their shipment?", ph:"e.g. BOL number, current status, expected clearance date, outstanding dues"},
+    {q:"Roughly how many active clients and shipments per month?", ph:"e.g. 25 clients, 60-80 shipments/month"},
+    {q:"Which documents must the system generate or store?", ph:"e.g. bill PDF, delivery order, customs documents, gate pass"}
+  ],
+  "Import / Export trading": [
+    {q:"Which currencies do you quote and bill in?", ph:"e.g. USD for export, BDT for local"},
+    {q:"How do you currently track LC / shipping documents?", ph:"e.g. paper file per LC, Excel register"},
+    {q:"How many shipments/orders per month, roughly?", ph:"e.g. 10-15 containers/month"}
+  ],
+  "Logistics / Courier / Delivery service": [
+    {q:"How does a delivery currently go from order to proof-of-delivery?", ph:"Describe the steps: who assigns the rider, how status gets updated"},
+    {q:"Do riders/drivers need their own app view? What should they see?", ph:"e.g. assigned parcels, address, COD amount, mark-delivered button"},
+    {q:"How is COD money currently reconciled?", ph:"e.g. rider deposits cash daily, manual register"},
+    {q:"Daily parcel volume, roughly?", ph:"e.g. 100-150 parcels/day"}
+  ],
+  "E-commerce / Online store": [
+    {q:"Where do your orders come from today?", ph:"e.g. Facebook page inbox, phone calls, physical shop"},
+    {q:"How do you manage stock right now?", ph:"e.g. no system, paper register, Excel"},
+    {q:"Who packs and ships orders, and with which courier?", ph:"e.g. myself, Pathao/RedX/Steadfast"},
+    {q:"Best-selling product categories?", ph:"Helps us design the catalog structure"}
+  ],
+  "Retail shop": [
+    {q:"Do you want online orders, or mainly a digital catalog customers can browse?", ph:"e.g. browse only, order via WhatsApp"},
+    {q:"How is stock tracked today?", ph:"e.g. memory, paper register, POS software"},
+    {q:"Single shop or multiple branches? If multiple, is stock shared?", ph:""}
+  ],
+  "Grocery / Pharmacy": [
+    {q:"What delivery time will you promise customers?", ph:"e.g. within 1 hour in local area, same-day city-wide"},
+    {q:"(Pharmacy) Will customers upload prescriptions? Who verifies them?", ph:"e.g. yes, our pharmacist checks before confirming"},
+    {q:"Roughly how many products (SKUs)?", ph:"e.g. 500+ items"}
+  ],
+  "Restaurant / Fast food": [
+    {q:"How do orders flow today from customer to kitchen?", ph:"e.g. waiter writes a slip, phone orders in a paper register"},
+    {q:"Peak-hour order volume?", ph:"e.g. 40-50 orders in the dinner rush"},
+    {q:"Own delivery staff, third-party (Foodpanda etc.), or pickup only?", ph:""},
+    {q:"Does the menu change often (daily items, seasonal)?", ph:"Affects how easy menu editing needs to be"}
+  ],
+  "Cafe / Bakery": [
+    {q:"Do you take custom/pre-orders (cakes, catering)? How far in advance?", ph:"e.g. cakes need 2 days notice"},
+    {q:"Delivery, pickup, or dine-in focus?", ph:""}
+  ],
+  "Salon / Spa / Beauty": [
+    {q:"Should customers book a specific staff member or just a time slot?", ph:""},
+    {q:"How are appointments managed today, and what goes wrong?", ph:"e.g. phone bookings, double-booking happens"},
+    {q:"Number of staff and services?", ph:"e.g. 5 stylists, 20 services"}
+  ],
+  "Education / Training / Coaching": [
+    {q:"Online classes, offline batches, or both?", ph:""},
+    {q:"How do students currently enroll and pay?", ph:"e.g. walk-in + bKash, no record system"},
+    {q:"Do you need attendance, results, or certificate features?", ph:"e.g. auto certificate after course completion"},
+    {q:"Number of courses and typical batch size?", ph:""}
+  ],
+  "Healthcare / Clinic / Doctor": [
+    {q:"How are appointments taken today, and what's the biggest problem?", ph:"e.g. phone only, patients wait long, no-shows"},
+    {q:"Should patients see their reports/prescriptions online?", ph:"e.g. yes, download lab reports after login"},
+    {q:"Number of doctors and daily patient volume?", ph:""}
+  ],
+  "Real estate": [
+    {q:"How many active listings, and rent/sale/both?", ph:"e.g. 40 listings, mostly rentals"},
+    {q:"Where does listing data live today?", ph:"e.g. Facebook posts, Excel, agent's phone"},
+    {q:"What do buyers ask most that the site should answer?", ph:"e.g. price, size, location map, photos"}
+  ],
+  "Hotel / Resort": [
+    {q:"Room types and total rooms?", ph:"e.g. 20 rooms: standard, deluxe, family"},
+    {q:"How are bookings taken today? Any OTA (Booking.com etc.)?", ph:""},
+    {q:"Does pricing change by season/date?", ph:"Flat pricing is much simpler to build"}
+  ],
+  "Travel / Tour agency": [
+    {q:"Fixed group packages, custom itineraries, or both?", ph:""},
+    {q:"How do customers currently book and pay?", ph:"e.g. office visit + cash advance"},
+    {q:"Top 3 destinations/packages you sell?", ph:""}
+  ],
+  "Manufacturing / Wholesale": [
+    {q:"Who are your buyers, and what's the minimum order?", ph:"e.g. retailers, MOQ 100 pcs"},
+    {q:"Should prices be public, or quote-on-request?", ph:"B2B often hides prices"},
+    {q:"Do buyers need spec sheets / catalogs to download?", ph:""}
+  ],
+  "Construction / Contractor": [
+    {q:"What types of projects, and typical project size?", ph:"e.g. residential buildings"},
+    {q:"How do clients currently request a quote?", ph:"e.g. phone, site visit first"},
+    {q:"Do you have before/after photos of past projects ready?", ph:""}
+  ],
+  "Law firm / Legal service": [
+    {q:"Main practice areas to highlight?", ph:"e.g. land disputes, company law, family law"},
+    {q:"How should consultation booking work?", ph:"e.g. request form, we call back to confirm"}
+  ],
+  "NGO / Non-profit": [
+    {q:"How will donations be collected, and do donors need receipts?", ph:"e.g. bKash merchant, need auto receipt email"},
+    {q:"Main programs/causes to feature?", ph:""},
+    {q:"Do you need volunteer registration?", ph:""}
+  ]
+};
+
+function renderIndustryQuestions(type){
+  const container = document.getElementById('bizQuestions');
+  container.innerHTML = '';
+  const qs = INDUSTRY_QUESTIONS[type];
+  if(!qs || !qs.length) return;
+  const note = document.createElement('div');
+  note.className = 'sec-note';
+  note.textContent = 'Answer in your own words — Bangla, Banglish, or English, whatever is comfortable. The more detail you give, the more accurate your quotation will be.';
+  container.appendChild(note);
+  qs.forEach(function(item, i){
+    const div = document.createElement('div');
+    div.className = 'field';
+    const id = 'bq_' + i;
+    const label = document.createElement('label');
+    label.setAttribute('for', id);
+    label.textContent = item.q;
+    const ta = document.createElement('textarea');
+    ta.id = id;
+    ta.rows = 3;
+    ta.placeholder = item.ph || '';
+    div.appendChild(label);
+    div.appendChild(ta);
+    container.appendChild(div);
+  });
+}
+
+function collectIndustryAnswers(){
+  const qs = INDUSTRY_QUESTIONS[bizTypeSelect.value];
+  if(!qs) return [];
+  return qs.map(function(item, i){
+    const el = document.getElementById('bq_' + i);
+    return { question: item.q, answer: el ? el.value.trim() : '' };
+  }).filter(function(x){ return x.answer; });
+}
+
+// ---------- answer quality (heuristic — catches junk, cannot judge true meaning) ----------
+function meaninglessReason(text){
+  const t = (text||'').trim();
+  if(!t) return null; // emptiness handled separately by required-check
+  if(t.length < 10) return 'too short — please write at least one full sentence';
+  const words = t.split(/\s+/);
+  if(words.length < 3) return 'please write a fuller answer, not just one or two words';
+  const squeezed = t.toLowerCase().replace(/\s+/g,'');
+
+  // must be mostly actual letters (any language/script) — not just numbers/symbols/emoji
+  const letterChars = (squeezed.match(/\p{L}/gu) || []).length;
+  if(letterChars / squeezed.length < 0.5) return 'please describe this in words, not just numbers or symbols';
+
+  // single character repeated ("ssssss", "কককক")
+  if(/^(.)\1+$/.test(squeezed)) return 'repeated characters are not a real answer';
+
+  // very low character variety = filler, regardless of script
+  const uniqChars = new Set(squeezed.split('')).size;
+  if(squeezed.length >= 12 && uniqChars <= 4) return 'this looks like filler text';
+
+  // short repeating pattern covering the whole string ("asas asas", "hahaha", "abcabcabc")
+  for(let n = 1; n <= 4; n++){
+    if(squeezed.length >= n * 4){
+      const unit = squeezed.slice(0, n);
+      const rebuilt = unit.repeat(Math.ceil(squeezed.length / n)).slice(0, squeezed.length);
+      if(rebuilt === squeezed) return 'a repeated pattern is not a real answer';
+    }
+  }
+
+  // same word repeated instead of an actual sentence — works for any language
+  const uniqWords = new Set(words.map(w => w.toLowerCase())).size;
+  if(words.length >= 4 && uniqWords / words.length < 0.4) return 'repeating the same word does not explain your need';
+
+  // Latin-script-specific keyboard-mash check (does not affect Bangla/Arabic/etc. text)
+  const latinWords = words.filter(w => /^[a-z]+$/i.test(w) && w.length > 2);
+  if(latinWords.length >= 2){
+    const noVowel = latinWords.filter(w => !/[aeiou]/i.test(w)).length;
+    if(noVowel / latinWords.length > 0.5) return 'this looks like random typing';
+  }
+  if(t.length < 40 && /(asdf|qwer|zxcv|hjkl|1234|4321)/i.test(squeezed)) return 'this looks like keyboard filler';
+
+  return null;
+}
+
+// fields that must be filled AND meaningful; plus fields checked only if filled
+const QUALITY_REQUIRED = ['audience','dscCurrentProcess','dscPain'];
+const QUALITY_IF_FILLED = ['dscWhyNow','dscSuccess','dscAvoid','bizSpecificField'];
+
+function qualityCheck(){
+  const problems = [];
+  QUALITY_REQUIRED.forEach(function(id){
+    const r = meaninglessReason(val(id));
+    if(!val(id)) problems.push({id, reason:'this question is required'});
+    else if(r) problems.push({id, reason:r});
+  });
+  QUALITY_IF_FILLED.forEach(function(id){
+    const r = meaninglessReason(val(id));
+    if(val(id) && r) problems.push({id, reason:r});
+  });
+  const qs = INDUSTRY_QUESTIONS[bizTypeSelect.value];
+  if(qs){
+    qs.forEach(function(item, i){
+      const el = document.getElementById('bq_'+i);
+      if(el && el.value.trim()){
+        const r = meaninglessReason(el.value.trim());
+        if(r) problems.push({id:'bq_'+i, reason:r});
+      }
+    });
+  }
+  return problems;
+}
+
+// ---------- scope sanity check ----------
+function scopeNotes(){
+  const notes = [];
+  const swCount = document.querySelectorAll('#featuresGrid input[data-tag="software"]:checked').length;
+  const pt = radioVal('projectType');
+  if(pt === 'website' && swCount >= 3){
+    notes.push('Project type is "Website" but ' + swCount + ' software-level features are selected (roles, multi-branch, API etc.) — this is effectively custom software; scope and price will reflect that.');
+  }
+  const tl = document.getElementById('timeline').value;
+  const heavy = swCount >= 4 || pt === 'software';
+  if(heavy && (tl.startsWith('ASAP') || tl.startsWith('2–4'))){
+    notes.push('The selected feature depth usually needs more time than "' + tl + '". A phased delivery (core first, rest later) is recommended — to be discussed in the kickoff call.');
+  }
+  return notes;
+}
+
+function collectData(){
+  const projTypeMap = {website:'Website', store:'Online store', software:'Custom software / web app', unsure:'Not sure — needs advice'};
+  const hasSiteMap = {yes:'Existing website/app', no:'Nothing yet', rebuild:'Has one, needs rebuild/upgrade', manual:'Currently manual (paper/Excel/WhatsApp)'};
+  const maintMap = {yes:'Yes, monthly support', no:'No, one-time build only', unsure:'Not sure yet'};
+  return {
+    refNo: REF_NO,
+    submittedAt: new Date().toISOString(),
+    status: "new",
+    projectType: projTypeMap[radioVal('projectType')] || '',
+    business: {
+      name: val('bizName'), type: bizTypeSelect.value,
+      contact: val('contactName'), phone: val('phone'), email: val('email'),
+      location: val('location'),
+      preferredContact: document.getElementById('commChannel').value,
+      bestTimeToContact: val('commTime'),
+      timezone: val('timezone'),
+      pointOfContact: val('pointOfContact'),
+      heardFrom: document.getElementById('heardFrom').value
+    },
+    store: (radioVal('projectType')==='store') ? {
+      productCount: document.getElementById('stProductCount').value,
+      paymentCollection: document.getElementById('stPayment').value,
+      taxHandling: document.getElementById('stTax').value,
+      deliveryZones: val('stDelivery'),
+      returnPolicy: val('stReturns')
+    } : null,
+    localization: {
+      languages: getCheckedIn('langGrid').concat(val('langOther') ? [val('langOther')] : []),
+      primaryLanguage: document.getElementById('primaryLang').value,
+      rtl: radioVal('rtl')
+    },
+    marketing: {
+      googleBusiness: document.getElementById('gBusiness').value,
+      analytics: document.getElementById('analytics').value,
+      keywords: val('seoKeywords'),
+      socialChannels: val('socialChannels')
+    },
+    compliance: {
+      privacyPages: document.getElementById('privacyPages').value,
+      cookieConsent: document.getElementById('cookieConsent').value,
+      marketScope: document.getElementById('foreignMarket').value
+    },
+    handover: {
+      accountOwnership: document.getElementById('accountOwner').value,
+      contentUpdater: document.getElementById('contentUpdater').value,
+      training: document.getElementById('trainingNeeded').value,
+      adminAccess: val('adminAccess')
+    },
+    agreement: {
+      agreed: document.getElementById('agreeCheck').checked,
+      ndaRequested: document.getElementById('ndaCheck').checked,
+      signedName: val('signName'),
+      signedDate: val('signDate'),
+      signedAt: new Date().toISOString()
+    },
+    currentSetup: { status: hasSiteMap[radioVal('hasSite')] || '', links: val('existingLinks') },
+    goals: Array.from(document.querySelectorAll('#sec-4 input[type=checkbox]:checked')).map(i=>i.value).concat(val('goalOther') ? [val('goalOther')] : []),
+    audience: val('audience'),
+    discovery: {
+      currentProcess: val('dscCurrentProcess'),
+      biggestPain: val('dscPain'),
+      whyNow: val('dscWhyNow'),
+      successDefinition: val('dscSuccess'),
+      decisionMaker: val('dscDecisionMaker'),
+      competitorReference: val('dscCompetitor'),
+      thingsToAvoid: val('dscAvoid')
+    },
+    pages: getCheckedIn('pagesGrid').concat(val('pagesOther') ? [val('pagesOther')] : []),
+    features: getCheckedIn('featuresGrid').concat(val('featuresOther') ? [val('featuresOther')] : []),
+    software: (radioVal('projectType')==='software') ? {
+      purpose: val('swPurpose'), roles: val('swRoles'),
+      userCount: document.getElementById('swUserCount').value,
+      modules: getCheckedIn('swModulesGrid'),
+      integrations: val('swIntegrations'),
+      platform: document.getElementById('swPlatform').value,
+      dataSensitivity: document.getElementById('swDataSensitivity').value,
+      hosting: document.getElementById('swHosting').value,
+      migration: val('swMigration'), scale: val('swScale')
+    } : null,
+    design: { style: document.getElementById('style').value, colors: val('colors'), references: val('refSites') },
+    content: { logo: document.getElementById('logoStatus').value, photos: document.getElementById('photoStatus').value, copy: document.getElementById('copyStatus').value, brandGuidelines: document.getElementById('brandGuide').value, contentVolume: val('contentVolume') },
+    domain: { status: document.getElementById('domainStatus').value, name: val('domainName') },
+    budget: { currency: document.getElementById('currency').value, range: document.getElementById('budget').value, timeline: document.getElementById('timeline').value, maintenance: maintMap[radioVal('maintenance')] || '', phasePlan: val('phasePlan') },
+    bizSpecific: { title: document.getElementById('bizSpecificTitle').textContent, answers: collectIndustryAnswers(), detail: val('bizSpecificField') },
+    scopeNotes: scopeNotes(),
+    notes: val('notes')
+  };
+}
+
+// ---------- project type toggle ----------
+const ptConfirmMsgs = {
+  website: "Great — we'll ask about pages, content and design references.",
+  store: "Got it — we'll ask about products, payments and shipping.",
+  software: "Got it — we'll ask about users, roles and integrations.",
+  unsure: "No problem — skip ahead and tell us your goals; we'll help pick the right fit."
+};
+document.querySelectorAll('#projectTypeToggle input[type=radio]').forEach(function(radio){
+  radio.addEventListener('change', function(){
+    document.querySelectorAll('.type-card').forEach(c=>c.classList.remove('active'));
+    this.closest('.type-card').classList.add('active');
+    const confirm = document.getElementById('ptConfirm');
+    document.getElementById('ptConfirmText').textContent = ptConfirmMsgs[this.value] || '';
+    confirm.classList.add('show');
+    const softwareSection = document.getElementById('sec-8');
+    const isSoftware = (this.value === 'software');
+    softwareSection.style.display = isSoftware ? 'block' : 'none';
+    const storeSection = document.getElementById('sec-7b');
+    storeSection.style.display = (this.value === 'store') ? 'block' : 'none';
+    buildNav();
+    updateProgress();
+  });
+});
+
+// ---------- adaptive placeholders by business category ----------
+const DEFAULT_PH = {
+  bizName:"Enter your business or brand name",
+  audience:"Describe who will use this — customers, staff, or both",
+  dscCurrentProcess:"Describe how you currently handle this — phone orders, paper register, spreadsheet, etc.",
+  dscPain:"Describe the biggest problem with how things work today",
+  dscWhyNow:"Explain what's driving this decision now",
+  dscSuccess:"Describe what success looks like 6 months after launch",
+  contentVolume:"Give a rough estimate of pages/products/items",
+  seoKeywords:"Enter the search terms customers would use to find you"
+};
+const TAG_COPY = {
+  shop:{ bizName:"e.g. Urban Fashion House, Dhaka Mart", audience:"e.g. walk-in customers, online buyers, delivery riders",
+    process:"Orders come in via phone calls or Facebook Messenger; stock is tracked in a paper register or Excel sheet.",
+    pain:"Orders get missed or double-booked, stock counts go wrong, there's no order history to check back on.",
+    whyNow:"e.g. Losing sales to competitors who are already online; tired of tracking stock on paper",
+    success:"e.g. Steady stream of online orders, stock numbers that are always accurate, fewer 'is this in stock' calls",
+    contentVolume:"e.g. 60 products across 8 categories — rough estimate is fine",
+    seoKeywords:"e.g. 'buy fashion online Dhaka', 'grocery delivery Khulna'" },
+  food:{ bizName:"e.g. Dhaka Bites Restaurant, Riverside Cafe", audience:"e.g. dine-in customers, delivery customers, kitchen and counter staff",
+    process:"Orders are taken by waiter or phone and passed to the kitchen on paper slips.",
+    pain:"Orders get delayed or mixed up during rush hours, and there's no easy way to reprint or check past orders.",
+    whyNow:"e.g. Losing walk-in customers to delivery apps; want direct online ordering without commission fees",
+    success:"e.g. 40+ online orders a week, no more mixed-up orders during the rush",
+    contentVolume:"e.g. 35 menu items across 6 categories",
+    seoKeywords:"e.g. 'best biryani Khulna', 'restaurant delivery near me'" },
+  booking:{ bizName:"e.g. Glow Beauty Salon, Prime Fitness", audience:"e.g. clients booking appointments, front-desk staff, service providers",
+    process:"Appointments are booked over phone/WhatsApp and written into a register or paper calendar.",
+    pain:"Double-bookings happen, there's no reminder system, and it's hard to see the full day's schedule at a glance.",
+    whyNow:"e.g. Missed appointments from phone-only booking; want clients to self-book anytime",
+    success:"e.g. A fully booked calendar with no double-bookings, clients booking directly online",
+    contentVolume:"e.g. 12 services, 4 staff profiles",
+    seoKeywords:"e.g. 'salon appointment Dhaka', 'best spa near me'" },
+  tracking:{ bizName:"e.g. Swift Cargo Services, Dhaka Express Logistics", audience:"e.g. clients tracking shipments/orders, internal operations staff",
+    process:"Status updates are shared manually by phone or WhatsApp whenever a client asks.",
+    pain:"Clients call repeatedly asking 'where is my order', and staff spend hours updating people manually.",
+    whyNow:"e.g. Clients calling constantly for status updates; billing takes too long to prepare manually",
+    success:"e.g. Clients self-check shipment status, billing generated in minutes instead of days",
+    contentVolume:"e.g. tracking pages for 3 shipment stages, 1 client portal",
+    seoKeywords:"e.g. 'CNF agent Mongla', 'courier service Dhaka'" },
+  listing:{ bizName:"e.g. Green Acres Realty, Coastal Stays", audience:"e.g. buyers/renters browsing listings, sales or booking agents",
+    process:"Listings are shared as Facebook posts or WhatsApp messages with photos attached.",
+    pain:"Photos and details get lost across chats, old listings can't be searched, and leads aren't tracked anywhere.",
+    whyNow:"e.g. Facebook posts get buried fast; serious buyers can't search past listings",
+    success:"e.g. 30+ active listings online, buyers filtering and contacting directly through the site",
+    contentVolume:"e.g. 25 property listings with photos",
+    seoKeywords:"e.g. 'apartment for rent Dhaka', 'buy land Khulna'" },
+  visual:{ bizName:"e.g. Frame & Focus Studio, Atelier Design Co.", audience:"e.g. prospective clients browsing your portfolio, event/project inquiries",
+    process:"Work is shown through Instagram/Facebook posts and shared drive links on request.",
+    pain:"Best work isn't organized in one place, and inquiries come in scattered across DMs, calls, and email.",
+    whyNow:"e.g. Best work is scattered across Instagram; inquiries keep getting lost in DMs",
+    success:"e.g. A polished portfolio that converts inquiries into booked shoots or projects",
+    contentVolume:"e.g. 40 portfolio images across 5 categories",
+    seoKeywords:"e.g. 'wedding photographer Dhaka', 'interior designer near me'" },
+  trust:{ bizName:"e.g. Summit Associates, Reliable Consulting", audience:"e.g. prospective clients evaluating your credibility, referral partners",
+    process:"You rely on word-of-mouth, a Facebook page, or a basic one-page site.",
+    pain:"Serious inquiries can't find enough information to trust you, and there's no good way to showcase past work.",
+    whyNow:"e.g. Lost a client because we had no real online presence to point them to",
+    success:"e.g. Prospects arrive already convinced, fewer 'do you even have a website' questions",
+    contentVolume:"e.g. 6 service pages, 4 case studies",
+    seoKeywords:"e.g. 'business consultant Dhaka', 'legal service near me'" },
+  edu:{ bizName:"e.g. Bright Minds Academy, Skillbridge Institute", audience:"e.g. students and parents, instructors, admin/enrollment staff",
+    process:"Enrollment and payments are handled manually, with batches tracked in registers or spreadsheets.",
+    pain:"No automated reminders, and manual attendance/payment tracking eats up a lot of staff time.",
+    whyNow:"e.g. Enrollment tracked on paper is getting error-prone as batches grow",
+    success:"e.g. Online enrollment with automatic payment confirmation, no more manual attendance registers",
+    contentVolume:"e.g. 10 courses, 5 instructor profiles",
+    seoKeywords:"e.g. 'spoken english course Dhaka', 'coaching center near me'" },
+  content:{ bizName:"e.g. Daily Bulletin, Metro News Desk", audience:"e.g. readers/viewers, advertisers, editorial staff",
+    process:"Content is published ad-hoc across Facebook and a basic site, with no structured workflow.",
+    pain:"No consistent publishing workflow, older content is hard to find, and there's no way to track readership.",
+    whyNow:"e.g. No structured publishing workflow; older articles are impossible to find",
+    success:"e.g. Consistent publishing schedule, readership actually growing month over month",
+    contentVolume:"e.g. 15 articles/week, 6 categories",
+    seoKeywords:"e.g. 'Bangladesh news today', 'latest news Dhaka'" }
+};
+const BIZNAME_BY_INDUSTRY = {
+  "Shipping / C&F / Freight agent":"e.g. Swift Cargo Services",
+  "Import / Export trading":"e.g. Global Trade Partners",
+  "Logistics / Courier / Delivery service":"e.g. Express Delivery Network",
+  "E-commerce / Online store":"e.g. Trend Bazaar Online",
+  "Retail shop":"e.g. Metro Retail Store",
+  "Grocery / Pharmacy":"e.g. Green Valley Grocery & Pharmacy",
+  "Electronics / Mobile shop":"e.g. Digital World Electronics",
+  "Furniture":"e.g. Comfort Home Furniture",
+  "Jewelry":"e.g. Golden Elegance Jewelers",
+  "Textile / Garments":"e.g. Fabric House Textiles",
+  "Restaurant / Fast food":"e.g. Spice Route Restaurant",
+  "Cafe / Bakery":"e.g. Sweet Crust Bakery",
+  "Salon / Spa / Beauty":"e.g. Glow Beauty Lounge",
+  "Repair / Technician service":"e.g. QuickFix Repair Service",
+  "Consulting / Professional service":"e.g. Insight Business Consulting",
+  "Manufacturing / Wholesale":"e.g. Prime Manufacturing Co.",
+  "Agriculture / Agro business":"e.g. Green Harvest Agro Farms",
+  "Education / Training / Coaching":"e.g. Bright Minds Academy",
+  "Healthcare / Clinic / Doctor":"e.g. City Care Clinic",
+  "Veterinary / Pet care":"e.g. Happy Paws Veterinary",
+  "Real estate":"e.g. Green Acres Realty",
+  "Hotel / Resort":"e.g. Coastal Breeze Resort",
+  "Travel / Tour agency":"e.g. Wander Well Travels",
+  "Car rental":"e.g. DriveEasy Car Rental",
+  "Gym / Fitness center":"e.g. Prime Fitness Center",
+  "Sports club / Academy":"e.g. Champions Sports Academy",
+  "Automotive (dealer / garage)":"e.g. AutoPro Garage & Motors",
+  "Construction / Contractor":"e.g. Skyline Construction Co.",
+  "Event management":"e.g. Momentous Events",
+  "Photography / Creative agency":"e.g. Frame & Focus Studio",
+  "Media / News portal":"e.g. Daily Bulletin News",
+  "Music / Entertainment":"e.g. Rhythm House Entertainment",
+  "Law firm / Legal service":"e.g. Summit Legal Associates",
+  "Insurance agency":"e.g. SafeGuard Insurance",
+  "Bank / NBFI / Fintech":"e.g. TrustLine Financial Services",
+  "Daycare / Childcare":"e.g. Little Steps Daycare",
+  "Co-working space / Warehouse rental":"e.g. WorkHub Co-working Space",
+  "Association / Chamber / Union":"e.g. Traders Chamber Association",
+  "NGO / Non-profit":"e.g. Hopeline Foundation",
+  "IT / Software company":"e.g. Codeworks Software Ltd.",
+  "Freelancer / Personal portfolio":"e.g. your professional or brand name",
+  "Government / Public sector project":"e.g. department or project name",
+  "Other":"e.g. your business or brand name"
+};
+function applyIndustryPlaceholders(reco, type){
+  const els = {
+    bizName: document.getElementById('bizName'),
+    audience: document.getElementById('audience'),
+    process: document.getElementById('dscCurrentProcess'),
+    pain: document.getElementById('dscPain'),
+    whyNow: document.getElementById('dscWhyNow'),
+    success: document.getElementById('dscSuccess'),
+    contentVolume: document.getElementById('contentVolume'),
+    seoKeywords: document.getElementById('seoKeywords')
+  };
+  if(!reco){
+    els.bizName.placeholder = DEFAULT_PH.bizName;
+    els.audience.placeholder = DEFAULT_PH.audience;
+    els.process.placeholder = DEFAULT_PH.dscCurrentProcess;
+    els.pain.placeholder = DEFAULT_PH.dscPain;
+    els.whyNow.placeholder = DEFAULT_PH.dscWhyNow;
+    els.success.placeholder = DEFAULT_PH.dscSuccess;
+    els.contentVolume.placeholder = DEFAULT_PH.contentVolume;
+    els.seoKeywords.placeholder = DEFAULT_PH.seoKeywords;
+    return;
+  }
+  const primary = reco.tags.find(t=>t!=='all' && TAG_COPY[t]);
+  const copy = TAG_COPY[primary];
+  els.bizName.placeholder = BIZNAME_BY_INDUSTRY[type] || (copy ? copy.bizName : DEFAULT_PH.bizName);
+  els.audience.placeholder = copy ? copy.audience : DEFAULT_PH.audience;
+  els.process.placeholder = copy ? copy.process : DEFAULT_PH.dscCurrentProcess;
+  els.pain.placeholder = copy ? copy.pain : DEFAULT_PH.dscPain;
+  els.whyNow.placeholder = copy ? copy.whyNow : DEFAULT_PH.dscWhyNow;
+  els.success.placeholder = copy ? copy.success : DEFAULT_PH.dscSuccess;
+  els.contentVolume.placeholder = copy ? copy.contentVolume : DEFAULT_PH.contentVolume;
+  els.seoKeywords.placeholder = copy ? copy.seoKeywords : DEFAULT_PH.seoKeywords;
+}
+
+// ---------- business type -> recommendations ----------
+bizTypeSelect.addEventListener('change', function(){
+  const type = this.value;
+  const reco = RECO[type];
+  const note = document.getElementById('recoNote');
+  const tip = document.getElementById('recoTip');
+  const specSection = document.getElementById('sec-13');
+
+  document.querySelectorAll('.check-item.reco').forEach(el=>el.classList.remove('reco'));
+  applyIndustryPlaceholders(reco, type);
+
+  if(!reco){ note.style.display='none'; tip.style.display='none'; specSection.style.display='none'; document.getElementById('bizQuestions').innerHTML=''; buildNav(); updateProgress(); return; }
+
+  if(reco.note){ note.textContent = 'Suggested: ' + reco.note; note.style.display='block'; } else { note.style.display='none'; }
+  if(reco.tip){ tip.textContent = 'Tip: ' + reco.tip; tip.style.display='block'; } else { tip.style.display='none'; }
+
+  document.querySelectorAll('#pagesGrid input[type=checkbox], #featuresGrid input[type=checkbox]').forEach(function(box){
+    const tag = box.getAttribute('data-tag');
+    if(reco.tags.includes(tag)){
+      box.closest('.check-item').classList.add('reco');
+      if(!box.checked) box.checked = true;
+    }
+  });
+
+  document.getElementById('bizSpecificTitle').textContent = reco.specTitle;
+  document.getElementById('bizSpecificNote').textContent = reco.specNote;
+  document.getElementById('bizSpecificField').placeholder = reco.specPh;
+  renderIndustryQuestions(type);
+  specSection.style.display = 'block';
+  buildNav();
+  updateProgress();
+});
+
+// ---------- jump nav ----------
+let NAV_SECTIONS = [];
+let FORM_PCT = 0;
+function buildNav(){
+  const select = document.getElementById('jnSelect');
+  select.innerHTML = '';
+  NAV_SECTIONS = [];
+  document.querySelectorAll('main .section').forEach(function(sec){
+    if(sec.style.display === 'none') return;
+    const num = sec.querySelector('.sec-num').textContent;
+    const title = sec.querySelector('.sec-title').childNodes[0].textContent.trim();
+    NAV_SECTIONS.push(sec.id);
+    const opt = document.createElement('option');
+    opt.value = sec.id;
+    opt.textContent = num + ' · ' + title;
+    select.appendChild(opt);
+  });
+  updateNavProgress();
+}
+buildNav();
+
+document.getElementById('jnSelect').addEventListener('change', function(){
+  const sec = document.getElementById(this.value);
+  if(sec) sec.scrollIntoView({behavior:'smooth', block:'start'});
+  updateNavProgress();
+});
+document.getElementById('jnPrev').addEventListener('click', function(){ navStep(-1); });
+document.getElementById('jnNext').addEventListener('click', function(){ navStep(1); });
+
+function navStep(dir){
+  const select = document.getElementById('jnSelect');
+  const idx = NAV_SECTIONS.indexOf(select.value);
+  const nextIdx = idx + dir;
+  if(nextIdx < 0 || nextIdx >= NAV_SECTIONS.length) return;
+  const sec = document.getElementById(NAV_SECTIONS[nextIdx]);
+  if(sec) sec.scrollIntoView({behavior:'smooth', block:'start'});
+  select.value = NAV_SECTIONS[nextIdx];
+  updateNavProgress();
+}
+
+function updateNavProgress(){
+  const select = document.getElementById('jnSelect');
+  const idx = NAV_SECTIONS.indexOf(select.value) + 1;
+  const n = idx || 1;
+  document.getElementById('jnProgressText').textContent = 'Section ' + n + ' of ' + NAV_SECTIONS.length + (typeof FORM_PCT === 'number' ? ' · ' + FORM_PCT + '% complete' : '');
+  document.getElementById('jnPrev').disabled = (n <= 1);
+  document.getElementById('jnNext').disabled = (n >= NAV_SECTIONS.length);
+}
+
+// keep dropdown + progress in sync with manual scrolling
+window.addEventListener('scroll', function(){
+  if(!NAV_SECTIONS.length) return;
+  let current = NAV_SECTIONS[0];
+  NAV_SECTIONS.forEach(function(id){
+    const sec = document.getElementById(id);
+    if(!sec) return;
+    const rect = sec.getBoundingClientRect();
+    if(rect.top <= 120) current = id;
+  });
+  const select = document.getElementById('jnSelect');
+  if(select.value !== current){ select.value = current; updateNavProgress(); }
+}, {passive:true});
+
+// ---------- progress + stamp ----------
+const REQUIRED_IDS = ['bizName','bizType','contactName','phone','audience','dscCurrentProcess','dscPain','budget','timeline'];
+function updateProgress(){
+  let total = REQUIRED_IDS.length + 1; // +1 for project type radio group
+  let filled = 0;
+  REQUIRED_IDS.forEach(function(id){ if(val(id)) filled++; });
+  if(radioVal('projectType')) filled++;
+  const pct = Math.round((filled/total)*100);
+  FORM_PCT = pct;
+  document.getElementById('progressFill').style.width = pct + '%';
+  updateNavProgress();
+  const badge = document.getElementById('stampBadge');
+  if(pct >= 100){
+    badge.classList.add('ready');
+    badge.innerHTML = 'READY TO<br>GENERATE';
+  } else {
+    badge.classList.remove('ready');
+    badge.innerHTML = 'DRAFT<br>IN PROGRESS';
+  }
+}
+document.getElementById('mainForm').addEventListener('input', updateProgress);
+document.getElementById('mainForm').addEventListener('change', updateProgress);
+updateProgress();
+
+// ---------- summary generation ----------
+document.getElementById('generateBtn').addEventListener('click', function(){
+  const missing = REQUIRED_IDS.filter(function(id){ return !val(id); });
+  if(!radioVal('projectType')) missing.push('projectType');
+  if(!val('signName')) missing.push('signName');
+  const status = document.getElementById('status');
+
+  if(!document.getElementById('agreeCheck').checked){
+    status.setAttribute('data-err','1');
+    status.textContent = 'Please read and accept the engagement terms (section 15) before generating.';
+    document.getElementById('sec-15').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+
+  if(missing.length){
+    missing.forEach(function(id){
+      const el = document.getElementById(id);
+      if(el) el.classList.add('field-error');
+    });
+    status.textContent = 'Please fill the required (*) fields before generating.';
+    status.setAttribute('data-err','1');
+    const firstMissing = document.getElementById(missing[0]) || document.getElementById('projectTypeToggle');
+    firstMissing.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+
+  // answer quality check — blocks junk/filler answers
+  const qProblems = qualityCheck();
+  if(qProblems.length){
+    qProblems.forEach(function(p){
+      const el = document.getElementById(p.id);
+      if(el) el.classList.add('field-error');
+    });
+    status.setAttribute('data-err','1');
+    status.textContent = 'Some answers need a bit more detail: ' + qProblems[0].reason + '. Real sentences (Bangla/Banglish/English all fine) help us quote accurately.';
+    const firstEl = document.getElementById(qProblems[0].id);
+    if(firstEl) firstEl.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  status.removeAttribute('data-err');
+
+  document.getElementById('signDate').value = new Date().toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'});
+
+  const goalChecks = Array.from(document.querySelectorAll('#sec-4 input[type=checkbox]:checked')).map(i=>i.value);
+  const pages = getCheckedIn('pagesGrid').concat(val('pagesOther') ? [val('pagesOther')] : []);
+  const features = getCheckedIn('featuresGrid').concat(val('featuresOther') ? [val('featuresOther')] : []);
+  const swModules = getCheckedIn('swModulesGrid');
+  const goalsFinal = goalChecks.concat(val('goalOther') ? [val('goalOther')] : []);
+
+  const hasSiteMap = {yes:'Existing website/app', no:'Nothing yet', rebuild:'Has one, needs rebuild/upgrade', manual:'Currently manual (paper/Excel/WhatsApp)'};
+  const maintMap = {yes:'Yes, monthly support', no:'No, one-time build only', unsure:'Not sure yet'};
+  const projTypeMap = {website:'Website', store:'Online store', software:'Custom software / web app', unsure:'Not sure — needs advice'};
+
+  const lines = [];
+  lines.push('PROJECT REQUIREMENT SUMMARY');
+  lines.push('Reference No: ' + REF_NO);
+  lines.push('='.repeat(40));
+  lines.push('');
+  lines.push('PROJECT TYPE');
+  lines.push('  ' + (projTypeMap[radioVal('projectType')] || '—'));
+  lines.push('');
+  lines.push('BUSINESS');
+  lines.push('  Name: ' + (val('bizName') || '—'));
+  lines.push('  Type: ' + (bizTypeSelect.value || '—'));
+  lines.push('  Contact: ' + (val('contactName') || '—') + '  |  ' + (val('phone') || '—') + '  |  ' + (val('email') || '—'));
+  lines.push('  Location: ' + (val('location') || '—'));
+  lines.push('  Preferred contact: ' + (document.getElementById('commChannel').value || '—') + (val('commTime') ? ' (' + val('commTime') + ')' : ''));
+  lines.push('  Timezone: ' + (val('timezone') || '—'));
+  lines.push('  Point of contact: ' + (val('pointOfContact') || '—'));
+  lines.push('  Heard from: ' + (document.getElementById('heardFrom').value || '—'));
+  lines.push('');
+  lines.push('CURRENT SETUP');
+  lines.push('  Status: ' + (hasSiteMap[radioVal('hasSite')] || '—'));
+  lines.push('  Links: ' + (val('existingLinks') || '—'));
+  lines.push('');
+  lines.push('GOALS');
+  lines.push('  ' + (goalsFinal.length ? goalsFinal.join(', ') : '—'));
+  lines.push('');
+  lines.push('AUDIENCE / USERS');
+  lines.push('  ' + (val('audience') || '—'));
+  lines.push('');
+  lines.push('SITUATION / DISCOVERY');
+  lines.push('  Current process: ' + (val('dscCurrentProcess') || '—'));
+  lines.push('  Biggest pain: ' + (val('dscPain') || '—'));
+  lines.push('  Why now: ' + (val('dscWhyNow') || '—'));
+  lines.push('  Success = : ' + (val('dscSuccess') || '—'));
+  lines.push('  Decision maker: ' + (val('dscDecisionMaker') || '—'));
+  lines.push('  Competitor ref: ' + (val('dscCompetitor') || '—'));
+  lines.push('  Avoid: ' + (val('dscAvoid') || '—'));
+  lines.push('');
+  lines.push('PAGES / SCREENS NEEDED');
+  lines.push('  ' + (pages.length ? pages.join(', ') : '—'));
+  lines.push('');
+  lines.push('FEATURES NEEDED');
+  lines.push('  ' + (features.length ? features.join(', ') : '—'));
+  lines.push('');
+
+  if(radioVal('projectType') === 'store'){
+    lines.push('ONLINE STORE DETAILS');
+    lines.push('  Products: ' + (document.getElementById('stProductCount').value || '—'));
+    lines.push('  Payment: ' + (document.getElementById('stPayment').value || '—'));
+    lines.push('  Tax: ' + (document.getElementById('stTax').value || '—'));
+    lines.push('  Delivery zones: ' + (val('stDelivery') || '—'));
+    lines.push('  Returns: ' + (val('stReturns') || '—'));
+    lines.push('');
+  }
+
+  const pType = radioVal('projectType');
+  if(pType === 'software'){
+    lines.push('CUSTOM SOFTWARE DETAILS');
+    lines.push('  Purpose: ' + (val('swPurpose') || '—'));
+    lines.push('  User roles: ' + (val('swRoles') || '—'));
+    lines.push('  Expected users: ' + (document.getElementById('swUserCount').value || '—'));
+    lines.push('  Core modules: ' + (swModules.length ? swModules.join(', ') : '—'));
+    lines.push('  Integrations: ' + (val('swIntegrations') || '—'));
+    lines.push('  Platform: ' + (document.getElementById('swPlatform').value || '—'));
+    lines.push('  Data sensitivity: ' + (document.getElementById('swDataSensitivity').value || '—'));
+    lines.push('  Hosting preference: ' + (document.getElementById('swHosting').value || '—'));
+    lines.push('  Migration from: ' + (val('swMigration') || '—'));
+    lines.push('  Scale expectation: ' + (val('swScale') || '—'));
+    lines.push('');
+  }
+
+  lines.push('DESIGN');
+  lines.push('  Style: ' + (document.getElementById('style').value || '—'));
+  lines.push('  Colors: ' + (val('colors') || '—'));
+  lines.push('  References: ' + (val('refSites') || '—'));
+  lines.push('');
+  const langs = getCheckedIn('langGrid').concat(val('langOther') ? [val('langOther')] : []);
+  lines.push('LANGUAGE & LOCALIZATION');
+  lines.push('  Languages: ' + (langs.length ? langs.join(', ') : '—'));
+  lines.push('  Primary: ' + (document.getElementById('primaryLang').value || '—'));
+  lines.push('  RTL layout: ' + (radioVal('rtl') || '—'));
+  lines.push('');
+  lines.push('CONTENT READINESS');
+  lines.push('  Logo: ' + (document.getElementById('logoStatus').value || '—'));
+  lines.push('  Photos: ' + (document.getElementById('photoStatus').value || '—'));
+  lines.push('  Copy/Text: ' + (document.getElementById('copyStatus').value || '—'));
+  lines.push('  Brand guideline: ' + (document.getElementById('brandGuide').value || '—'));
+  lines.push('  Content volume: ' + (val('contentVolume') || '—'));
+  lines.push('');
+  lines.push('SEO & MARKETING');
+  lines.push('  Google Business: ' + (document.getElementById('gBusiness').value || '—'));
+  lines.push('  Analytics: ' + (document.getElementById('analytics').value || '—'));
+  lines.push('  Search keywords: ' + (val('seoKeywords') || '—'));
+  lines.push('  Social channels: ' + (val('socialChannels') || '—'));
+  lines.push('');
+  lines.push('LEGAL & COMPLIANCE');
+  lines.push('  Privacy/Terms pages: ' + (document.getElementById('privacyPages').value || '—'));
+  lines.push('  Cookie consent: ' + (document.getElementById('cookieConsent').value || '—'));
+  lines.push('  Market scope: ' + (document.getElementById('foreignMarket').value || '—'));
+  lines.push('');
+  lines.push('OWNERSHIP & HANDOVER');
+  lines.push('  Accounts ownership: ' + (document.getElementById('accountOwner').value || '—'));
+  lines.push('  Content updates by: ' + (document.getElementById('contentUpdater').value || '—'));
+  lines.push('  Training: ' + (document.getElementById('trainingNeeded').value || '—'));
+  lines.push('  Admin access: ' + (val('adminAccess') || '—'));
+  lines.push('');
+  lines.push('DOMAIN & HOSTING');
+  lines.push('  Status: ' + (document.getElementById('domainStatus').value || '—'));
+  lines.push('  Domain name: ' + (val('domainName') || '—'));
+  lines.push('');
+  lines.push('BUDGET & TIMELINE');
+  lines.push('  Currency: ' + (document.getElementById('currency').value || '—'));
+  lines.push('  Budget: ' + (document.getElementById('budget').value || '—'));
+  lines.push('  Timeline: ' + (document.getElementById('timeline').value || '—'));
+  lines.push('  Maintenance: ' + (maintMap[radioVal('maintenance')] || '—'));
+  lines.push('  Phase plan: ' + (val('phasePlan') || '—'));
+  lines.push('');
+  const indAnswers = collectIndustryAnswers();
+  const bizSpecVal = val('bizSpecificField');
+  if(indAnswers.length || bizSpecVal){
+    lines.push((document.getElementById('bizSpecificTitle').textContent || 'BUSINESS-SPECIFIC DETAILS').toUpperCase());
+    indAnswers.forEach(function(x){
+      lines.push('  Q: ' + x.question);
+      lines.push('  A: ' + x.answer);
+    });
+    if(bizSpecVal) lines.push('  Additional: ' + bizSpecVal);
+    lines.push('');
+  }
+  const sNotes = scopeNotes();
+  if(sNotes.length){
+    lines.push('SCOPE & FEASIBILITY NOTES (auto-generated)');
+    sNotes.forEach(function(n){ lines.push('  ! ' + n); });
+    lines.push('');
+  }
+  lines.push('NOTES');
+  lines.push('  ' + (val('notes') || '—'));
+  lines.push('');
+  lines.push('DECLARATION & AGREEMENT');
+  lines.push('  The client has read and accepted the engagement terms');
+  lines.push('  stated in this requirement sheet, and confirms the');
+  lines.push('  information provided is accurate.');
+  lines.push('  NDA requested: ' + (document.getElementById('ndaCheck').checked ? 'YES — discuss before sharing details' : 'No'));
+  lines.push('  Signed (typed): ' + (val('signName') || '—'));
+  lines.push('  Date: ' + (val('signDate') || '—'));
+  lines.push('  Reference: ' + REF_NO);
+
+  document.getElementById('summaryBox').textContent = lines.join('\n');
+  document.getElementById('summaryWrap').style.display = 'block';
+  document.getElementById('copyBtn').style.display = 'inline-block';
+  document.getElementById('printBtn').style.display = 'inline-block';
+  document.getElementById('submitBtn').style.display = 'inline-block';
+  status.textContent = 'Summary generated. Review it, then press "Send report by email".';
+  document.getElementById('stampBadge').classList.add('done');
+  document.getElementById('stampBadge').innerHTML = 'REQUIREMENT<br>COMPLETE';
+  document.getElementById('summaryWrap').scrollIntoView({behavior:'smooth'});
+});
+
+// ---------- send report by email ----------
+document.getElementById('submitBtn').addEventListener('click', function(){
+  const btn = this;
+  const status = document.getElementById('status');
+  status.removeAttribute('data-err');
+  const summary = document.getElementById('summaryBox').textContent;
+  const bizName = val('bizName') || 'New inquiry';
+  const subject = 'Project Requirement — ' + bizName + ' (' + REF_NO + ')';
+  const mailto = 'mailto:' + REPORT_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(summary);
+  window.location.href = mailto;
+  btn.textContent = 'Email app opened ✓';
+  status.textContent = 'Your email app should now open with the report ready to send — just hit send there. If the text looks cut off, use "Copy summary" and paste it into the email body instead.';
+  setTimeout(function(){ btn.textContent = 'Send report by email'; }, 4000);
+  try{ localStorage.removeItem('intake_draft_v1'); }catch(e){}
+});
+
+document.getElementById('copyBtn').addEventListener('click', function(){
+  navigator.clipboard.writeText(document.getElementById('summaryBox').textContent).then(function(){
+    const status = document.getElementById('status');
+    status.removeAttribute('data-err');
+    status.textContent = 'Copied to clipboard.';
+    setTimeout(()=>{ status.textContent=''; }, 2500);
+  });
+});
+document.getElementById('printBtn').addEventListener('click', function(){ window.print(); });
+
+// clear field-error styling as user fixes fields
+document.getElementById('mainForm').addEventListener('input', function(e){
+  if(e.target.classList && e.target.classList.contains('field-error') && val(e.target.id)){
+    e.target.classList.remove('field-error');
+  }
+});
+
+// ---------- draft auto-save (localStorage; silently disabled if storage blocked) ----------
+const DRAFT_KEY = 'intake_draft_v1';
+let draftTimer = null;
+
+function storageAvailable(){
+  try{ localStorage.setItem('__t','1'); localStorage.removeItem('__t'); return true; }
+  catch(e){ return false; }
+}
+const HAS_STORAGE = storageAvailable();
+
+function fieldKey(el){
+  if(el.type === 'radio') return 'r:' + el.name + '=' + el.value;
+  if(el.type === 'checkbox') return 'c:' + (el.id || (el.closest('[id]') ? el.closest('[id]').id : 'x') + '|' + el.value);
+  return 'v:' + el.id;
+}
+
+function saveDraft(){
+  if(!HAS_STORAGE) return;
+  try{
+    const o = {};
+    document.querySelectorAll('#mainForm input, #mainForm select, #mainForm textarea').forEach(function(el){
+      if(el.type === 'radio'){ if(el.checked) o[fieldKey(el)] = true; }
+      else if(el.type === 'checkbox'){ o[fieldKey(el)] = el.checked; }
+      else if(el.id && el.id !== 'signDate'){ if(el.value) o[fieldKey(el)] = el.value; }
+    });
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(o));
+    const at = document.getElementById('autosaveText');
+    const ai = document.getElementById('autosaveInd');
+    if(at){ at.textContent = 'Saved ' + new Date().toLocaleTimeString(); }
+    if(ai){ ai.classList.remove('saved'); ai.classList.remove('save-err'); void ai.offsetWidth; ai.classList.add('saved'); }
+  } catch(e){
+    // Storage full or blocked — surface this so the client knows to be careful,
+    // rather than silently losing answers.
+    const at = document.getElementById('autosaveText');
+    const ai = document.getElementById('autosaveInd');
+    if(at){ at.textContent = 'Could not autosave — please finish and send soon'; }
+    if(ai){ ai.classList.add('save-err'); }
+  }
+}
+
+function restoreDraft(){
+  if(!HAS_STORAGE) return;
+  let o = null;
+  try{ o = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); } catch(e){ return; }
+  if(!o) return;
+
+  // 1) text/select values
+  Object.keys(o).forEach(function(k){
+    if(k.startsWith('v:')){
+      const el = document.getElementById(k.slice(2));
+      if(el) el.value = o[k];
+    }
+  });
+  // 2) radios + fire structural changes
+  Object.keys(o).forEach(function(k){
+    if(k.startsWith('r:')){
+      const [name, value] = k.slice(2).split('=');
+      const el = document.querySelector('input[name="'+name+'"][value="'+value+'"]');
+      if(el){ el.checked = true; }
+    }
+  });
+  const pt = document.querySelector('input[name="projectType"]:checked');
+  if(pt) pt.dispatchEvent(new Event('change'));
+  if(bizTypeSelect.value) bizTypeSelect.dispatchEvent(new Event('change'));
+  // dynamic industry-question fields exist only after the bizType change above — re-apply their values now
+  Object.keys(o).forEach(function(k){
+    if(k.startsWith('v:bq_')){
+      const el = document.getElementById(k.slice(2));
+      if(el) el.value = o[k];
+    }
+  });
+  // 3) checkbox states LAST (override any auto-suggestions)
+  Object.keys(o).forEach(function(k){
+    if(k.startsWith('c:')){
+      const raw = k.slice(2);
+      if(raw.indexOf('|') === -1){
+        const el = document.getElementById(raw);
+        if(el) el.checked = o[k];
+      } else {
+        const [containerId, value] = raw.split('|');
+        const el = document.querySelector('#'+containerId+' input[type=checkbox][value="'+CSS.escape(value)+'"]');
+        if(el) el.checked = o[k];
+      }
+    }
+  });
+  updateProgress();
+  const at = document.getElementById('autosaveText');
+  if(at) at.textContent = 'Draft restored';
+}
+
+function clearDraft(){
+  if(!HAS_STORAGE) return;
+  try{ localStorage.removeItem(DRAFT_KEY); } catch(e){}
+}
+
+document.getElementById('mainForm').addEventListener('input', function(){
+  clearTimeout(draftTimer);
+  draftTimer = setTimeout(saveDraft, 800);
+});
+document.getElementById('mainForm').addEventListener('change', function(){
+  clearTimeout(draftTimer);
+  draftTimer = setTimeout(saveDraft, 400);
+});
+
+// Safety net: flush the draft immediately (bypassing the debounce) whenever the
+// client might leave, refresh, switch tabs, or lose focus — so nothing typed
+// is ever lost even if it happens mid-debounce-window.
+window.addEventListener('beforeunload', function(){ clearTimeout(draftTimer); saveDraft(); });
+window.addEventListener('pagehide', function(){ clearTimeout(draftTimer); saveDraft(); });
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState === 'hidden'){ clearTimeout(draftTimer); saveDraft(); }
+});
+document.getElementById('mainForm').addEventListener('blur', function(){
+  clearTimeout(draftTimer);
+  draftTimer = setTimeout(saveDraft, 150);
+}, true);
+// Belt-and-suspenders periodic save in case an event is ever missed.
+setInterval(saveDraft, 15000);
+
+document.getElementById('resetBtn').addEventListener('click', function(){
+  if(confirm('Clear all answers and start fresh?')){
+    // Clear the actual field values (not just storage) first — #mainForm is a <main>,
+    // not a real <form>, so there's no native .reset(). This also matters because reload
+    // triggers the beforeunload/pagehide safety-net save, which would otherwise re-persist
+    // the still-filled fields to localStorage a split second before the page unloads.
+    document.querySelectorAll('#mainForm input, #mainForm select, #mainForm textarea').forEach(function(el){
+      if(el.type === 'radio' || el.type === 'checkbox'){ el.checked = false; }
+      else { el.value = ''; }
+    });
+    clearDraft();
+    location.reload();
+  }
+});
+
+restoreDraft();
+</script>
+
+</body>
+</html>
