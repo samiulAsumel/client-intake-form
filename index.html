@@ -357,7 +357,8 @@
 </nav>
 
 <main id="mainForm">
-
+<input type="text" id="hpField" name="company_website" autocomplete="off" tabindex="-1" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0">
+  
   <div class="section" id="sec-1">
     <div class="sec-num mono">01</div>
     <div class="sec-title">What are you building?<span class="req" aria-hidden="true">*</span></div>
@@ -2189,22 +2190,51 @@ document.getElementById('generateBtn').addEventListener('click', function(){
   document.getElementById('summaryWrap').scrollIntoView({behavior:'smooth'});
 });
 
-// ---------- send report by email ----------
-document.getElementById('submitBtn').addEventListener('click', function(){
-  const btn = this;
-  const status = document.getElementById('status');
-  status.removeAttribute('data-err');
-  const summary = document.getElementById('summaryBox').textContent;
-  const bizName = val('bizName') || 'New inquiry';
-  const subject = 'Project Requirement — ' + bizName + ' (' + REF_NO + ')';
-  const mailto = 'mailto:' + REPORT_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(summary);
-  window.location.href = mailto;
-  btn.textContent = 'Email app opened ✓';
-  status.textContent = 'Your email app should now open with the report ready to send — just hit send there. If the text looks cut off, use "Copy summary" and paste it into the email body instead.';
-  setTimeout(function(){ btn.textContent = 'Send report by email'; }, 4000);
-  try{ localStorage.removeItem('intake_draft_v1'); }catch(e){}
-});
-
+// ---------- send report (backend first, mailto fallback) ----------
+  document.getElementById('submitBtn').addEventListener('click', function(){
+    const btn = this;
+    const status = document.getElementById('status');
+    status.removeAttribute('data-err');
+    const summary = document.getElementById('summaryBox').textContent;
+    const bizName = val('bizName') || 'New inquiry';
+    const subject = 'Project Requirement — ' + bizName + ' (' + REF_NO + ')';
+    const mailto = 'mailto:' + REPORT_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(summary);
+    function openMailto(){
+      window.location.href = mailto;
+      btn.textContent = 'Email app opened ✓';
+      status.textContent = 'Your email app should now open with the report ready to send — just hit send there. If the text looks cut off, use "Copy summary" and paste it into the email body instead.';
+      setTimeout(function(){ btn.textContent = 'Send report by email'; }, 4000);
+    }
+    const payload = {
+      hp: document.getElementById('hpField').value,
+      ref: REF_NO,
+      bizName: bizName,
+      projectType: (document.querySelector('input[name="projectType"]:checked') || {}).value || '',
+      bizType: val('bizType'),
+      summary: summary,
+      createdAt: new Date().toISOString()
+    };
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    fetch('/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function(res){
+      if(!res.ok) throw new Error('submit failed');
+      return res.json();
+    }).then(function(){
+      btn.disabled = false;
+      btn.textContent = 'Submitted ✓';
+      status.textContent = 'Your report was submitted successfully. Reference: ' + REF_NO + '. You can also send a copy by email below if you like.';
+      try{ localStorage.removeItem('intake_draft_v1'); }catch(e){}
+      setTimeout(function(){ btn.textContent = 'Send report by email'; }, 4000);
+    }).catch(function(){
+      btn.disabled = false;
+      openMailto();
+      try{ localStorage.removeItem('intake_draft_v1'); }catch(e){}
+    });
+  });
 document.getElementById('copyBtn').addEventListener('click', function(){
   navigator.clipboard.writeText(document.getElementById('summaryBox').textContent).then(function(){
     const status = document.getElementById('status');
