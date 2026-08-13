@@ -3,6 +3,7 @@
   "bizName": "Connectivity Test Co",
   "hp": "",
   "note": "diagnostic test from assistant",
-  "status": "New",
-  "receivedAt": "2026-08-13T11:53:29.531Z"
+  "status": "Lost",
+  "receivedAt": "2026-08-13T11:53:29.531Z",
+  "statusUpdatedAt": "2026-08-13T12:08:13.520Z"
 }
