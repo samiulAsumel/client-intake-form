@@ -17,7 +17,7 @@ const resp = await fetch(
 `https://api.github.com/repos/${env.GITHUB_OWNER}/${env.GITHUB_REPO}/contents/submissions/${ref}.json`,
 { method: 'PUT', headers: ghHeaders(env), body: JSON.stringify({ message: `New submission ${ref}`, content, branch: env.GITHUB_BRANCH || 'main' }) }
 );
-if (!resp.ok) { const errText = await resp.text(); return json({ ok: false, error: 'Storage failed', ghStatus: resp.status, detail: errText }, 502); }
+if (!resp.ok) return json({ ok: false, error: 'Storage failed' }, 502);
 
 if (env.CALLMEBOT_PHONE && env.CALLMEBOT_APIKEY) {
 const text = encodeURIComponent(`New submission ${ref} - ${data.bizName || 'unknown business'}`);
