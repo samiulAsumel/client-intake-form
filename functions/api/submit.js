@@ -6,7 +6,7 @@ const data = await request.json();
 if (!data || typeof data !== 'object') return json({ ok: false, error: 'Invalid payload' }, 400);
 if (data.hp) return json({ ok: true });
 
-const ref = (data.refNo || '').toString().trim();
+const ref = (data.ref || '').toString().trim();
 if (!/^REQ-\d{8}-\d{6}$/.test(ref)) return json({ ok: false, error: 'Invalid reference number' }, 400);
 
 data.status = 'New';
