@@ -15,5 +15,5 @@ const resp = await fetch(
 if (!resp.ok) return json({ ok: false, error: 'Not found' }, 404);
 const file = await resp.json();
 const content = decodeURIComponent(escape(atob(file.content)));
-return json({ ok: true, data: JSON.parse(content), sha: file.sha });
+return json({ ok: true, item: JSON.parse(content), sha: file.sha });
 }
