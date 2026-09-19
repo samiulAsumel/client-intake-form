@@ -1,53 +1,65 @@
 # Client Project Requirement Form
 
-A single-file, client-side project requirement intake form. Clients fill in their
-business/project details, review an auto-generated summary, and send it as an email —
-no backend, database, or build step required.
+An 18-section project requirement intake form for freelance and contract work. A client fills in
+their business and project details, reviews an auto-generated summary, and submits it. A small
+serverless backend stores each submission, and a password-protected admin dashboard tracks every
+lead from first contact to a decision.
+
+**Live:** [clif91.pages.dev](https://clif91.pages.dev)
 
 ## What it does
 
-- Walks the client through business info, project type, goals, pages/features,
-  localization, marketing, compliance, handover, and a signed declaration.
+- Walks the client through business info, project type, goals, pages/features, localization,
+  marketing, compliance, handover, and a typed-name declaration. The first answer ("what are you
+  building?") decides which later sections appear.
 - Generates a structured plain-text summary from the answers.
-- Sends the summary via the client's own email app (`mailto:`) to the address configured
-  in `REPORT_EMAIL`.
+- Submits the summary to `/api/submit`. If that call fails, it falls back to opening the client's own
+  email app (`mailto:`) with the summary ready to send.
+- Autosaves a draft in the client's browser so a closed tab does not lose the work.
 
-## Running it
+## Architecture
 
-Just open `index.html` in a browser, or serve the folder with any static file host
-(e.g. `python3 -m http.server`, Cloudflare Pages, Netlify, GitHub Pages). There is no
-server, API, or dependency to install.
+| Piece | What it is |
+|---|---|
+| `index.html` | The whole client-side app: markup, styles and vanilla JS in one dependency-free file |
+| `functions/api/submit.js` | Validates the reference format (`REQ-YYYYMMDD-NNNNNN`), silently drops honeypot spam, stamps the time, and writes the submission as a JSON file through the GitHub Contents API |
+| `functions/api/login.js` | Admin login: verifies the password against a PBKDF2-SHA-256 hash and returns an HMAC-signed token that expires after 12 hours |
+| `functions/api/list.js`, `item.js`, `status.js` | Admin-only: list submissions, read one, and set its status (`New`, `Contacted`, `Quoted`, `Negotiating`, `Won`, `Lost`). All return 401 without a valid token |
+| `admin.html` | The admin dashboard |
+
+Deployed on Cloudflare Pages: the static files plus Pages Functions.
 
 ## Configuration
 
-One constant in `index.html` controls where completed reports are sent:
+Set these as Cloudflare Pages environment variables/secrets. None belong in the repository.
 
-```js
-// index.html, near line 1359
-const REPORT_EMAIL = "sa.sumel91@gmail.com";
-```
+| Variable | Purpose |
+|---|---|
+| `GITHUB_TOKEN` | Token with Contents read/write on the storage repository |
+| `GITHUB_OWNER`, `GITHUB_REPO` | Where submissions are stored as `submissions/<ref>.json` |
+| `GITHUB_BRANCH` | Optional, defaults to `main` |
+| `ADMIN_HASH` | Admin password hash, format `iterations$saltHex$hashHex` (PBKDF2-SHA-256) |
+| `SESSION_SECRET` | Secret used to sign admin tokens |
+| `CALLMEBOT_PHONE`, `CALLMEBOT_APIKEY` | Optional: send a WhatsApp alert on each new submission |
 
-Change it to redirect the "Send report by email" button to a different address.
+The email fallback address is the `REPORT_EMAIL` constant in `index.html`.
+
+> **Use a private repository for `GITHUB_REPO`.** Submissions contain a client's business and contact
+> details. Pointing `GITHUB_REPO` at this public repository would publish them. The two files
+> currently in `submissions/` are test data (a connectivity check and a sample brief).
 
 ## Data & privacy
 
-- **No server.** All logic runs in the browser; nothing is transmitted anywhere except
-  the email the client explicitly sends via their own email client.
-- **Draft autosave.** As the client types, answers are saved to `localStorage`
-  (`intake_draft_v1`) in their own browser, debounced and flushed on blur/tab-hide/unload.
-  This is private to that browser and is never bundled with or shipped as part of the app.
-- **Blank by default.** Every field starts empty on a fresh visit. If a saved draft exists
-  in that browser, it's restored automatically; otherwise the form is completely blank.
-- **Reset Form** button clears every field, deletes the saved draft from `localStorage`,
-  and reloads to the original blank state.
-- The "Signed date" field is stamped with the current date only when the client presses
-  **Generate summary** (i.e. at the moment they "sign") — it is not persisted across visits
-  and is blank again on reload/reset.
+- The client form is blank on a fresh visit. A draft is saved to `localStorage` (`intake_draft_v1`)
+  in that browser only, and cleared after a successful submit or on **Reset Form**.
+- The "Signed date" field is stamped only when the client presses **Generate summary**.
+- Submissions are sent to the API only when the client presses the send button.
 
-## File structure
+## Running locally
 
-```
-index.html   the entire application (markup, styles, and vanilla JS)
-README.md    this file
-CLAUDE.md    notes for AI-assisted development on this repo
-```
+Open `index.html` in a browser to try the form. The submit and admin endpoints need Cloudflare Pages
+Functions (for example `wrangler pages dev`) and the variables above.
+
+## Status
+
+Working and in use. There is no automated test suite yet.

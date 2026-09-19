@@ -1,7 +1,8 @@
 # CLAUDE.md
 
-Project-specific guidance for working on this repo. This is a single, self-contained
-HTML file — no framework, no build step, no backend.
+Project-specific guidance for working on this repo. The client side is a single, self-contained
+HTML file (`index.html`) with no framework and no build step. A small Cloudflare Pages Functions
+backend (`functions/api/`) stores submissions, and `admin.html` is the admin dashboard.
 
 ## Architecture
 
@@ -38,14 +39,13 @@ field before the user or their saved draft does. Do not reintroduce this.
 - The **Reset Form** button must always fully return the form to this same blank,
   storage-cleared state.
 
-## No backend
+## Backend
 
-Earlier versions of this project included a Cloudflare Worker (`worker.js`) and admin
-dashboard (`dashboard.html`) that stored submissions to a private GitHub repo. These were
-removed because `index.html` sends reports via `mailto:` only and never called that Worker
-API — keeping unused backend code around would have been misleading. If a backend intake
-system is wanted again, it should be designed fresh against the current `mailto`-based flow
-rather than resurrecting the old Worker/dashboard pair.
+`functions/api/` holds the Pages Functions: `submit.js` (public), and `login.js`, `list.js`, `item.js`,
+`status.js` (admin, token-protected). Submissions are stored as JSON files in the repository named by
+`GITHUB_REPO`, which should be a private repository. See the README for the environment variables.
+`index.html` posts to `/api/submit` and falls back to `mailto:` if that call fails; keep that
+fallback working when editing the send handler.
 
 ## When editing
 
